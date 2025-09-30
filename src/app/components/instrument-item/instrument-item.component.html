@@ -1,1 +1,44 @@
-<p>InstrumentItem placeholder</p>
+<div 
+  class="instrument-item-row grid align-items-center p-2 cursor-pointer border-bottom-1 border-100 hover:bg-gray-50 transition-colors transition-duration-150"
+  [class.bg-primary-50]="isSelected"
+  [class.border-primary-200]="isSelected"
+  (click)="onItemClick()">
+  
+  <!-- Instrument Name and Symbol -->
+  <div class="col-4 text-left">
+    <div class="font-medium text-900">{{ instrument?.shortName || instrument?.name || 'N/A' }}</div>
+    <div class="text-sm text-500">{{ instrument?.codeInstrument || 'N/A' }}</div>
+  </div>
+  
+  <!-- Last Price -->
+  <div class="col-2 text-right">
+    <div class="font-medium">{{ instrument?.lastPrice || 'N/A' }}</div>
+  </div>
+  
+  <!-- Daily Variation (absolute) -->
+  <div class="col-2 text-right">
+    <div 
+      class="font-medium"
+      [class.text-green-600]="instrument?.pctDay > 0"
+      [class.text-red-600]="instrument?.pctDay < 0"
+      [class.text-600]="instrument?.pctDay === 0">
+      {{ instrument?.varDay || 'N/A' }}
+    </div>
+  </div>
+  
+  <!-- Daily Variation (percentage) -->
+  <div class="col-2 text-right">
+    <div 
+      class="font-medium"
+      [class.text-green-600]="instrument?.pctDay > 0"
+      [class.text-red-600]="instrument?.pctDay < 0"
+      [class.text-600]="instrument?.pctDay === 0">
+      {{ instrument?.pctDay ? (instrument.pctDay + '%') : 'N/A' }}
+    </div>
+  </div>
+  
+  <!-- Volume -->
+  <div class="col-2 text-right">
+    <div class="text-600">{{ instrument?.volume || 'N/A' }}</div>
+  </div>
+</div>

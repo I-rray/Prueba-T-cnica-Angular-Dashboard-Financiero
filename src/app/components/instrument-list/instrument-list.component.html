@@ -1,1 +1,27 @@
-<app-instrument-item></app-instrument-item>
+<div class="instrument-list-container h-30rem overflow-auto border-1 border-300 border-round">
+  <!-- Table Header -->
+  <div class="instrument-list-header sticky top-0 bg-white border-bottom-1 border-300 p-2">
+    <div class="grid align-items-center">
+      <div class="col-4 text-left font-semibold">Instrumento</div>
+      <div class="col-2 text-right font-semibold">Precio</div>
+      <div class="col-2 text-right font-semibold">Var. Día</div>
+      <div class="col-2 text-right font-semibold">Var. %</div>
+      <div class="col-2 text-right font-semibold">Volumen</div>
+    </div>
+  </div>
+  
+  <!-- Table Body -->
+  <div class="instrument-list-body">
+    <app-instrument-item 
+      *ngFor="let instrument of instruments; trackBy: trackByInstrument" 
+      [instrument]="instrument" 
+      [isSelected]="selectedInstrument?.codeInstrument === instrument.codeInstrument"
+      (clicked)="onInstrumentClicked($event)">
+    </app-instrument-item>
+    
+    <!-- Empty state -->
+    <div *ngIf="instruments.length === 0" class="text-center p-4 text-500">
+      No hay instrumentos disponibles
+    </div>
+  </div>
+</div>

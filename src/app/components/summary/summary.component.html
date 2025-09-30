@@ -1,1 +1,126 @@
-<p>Summary placeholder</p>
+<div class="summary-container">
+  <div *ngIf="summary && summary.data; else noSummary" class="summary-content">
+    <h3 class="text-xl font-semibold text-900 mb-3">Resumen Detallado</h3>
+    
+    <!-- Price Information -->
+    <div *ngIf="summary.data.price" class="mb-4">
+      <h4 class="text-lg font-medium text-700 mb-3">Información de Precios</h4>
+      <div class="grid">
+        <div class="col-12 md:col-6 lg:col-4">
+          <div class="flex justify-content-between align-items-center py-2 border-bottom-1 surface-border">
+            <span class="text-600 font-medium">Precio Actual</span>
+            <span class="font-bold text-900">${{ summary.data.price.lastPrice | number:'1.2-2' }}</span>
+          </div>
+        </div>
+        <div class="col-12 md:col-6 lg:col-4">
+          <div class="flex justify-content-between align-items-center py-2 border-bottom-1 surface-border">
+            <span class="text-600 font-medium">Precio Apertura</span>
+            <span class="font-semibold text-700">${{ summary.data.price.openPrice | number:'1.2-2' }}</span>
+          </div>
+        </div>
+        <div class="col-12 md:col-6 lg:col-4">
+          <div class="flex justify-content-between align-items-center py-2 border-bottom-1 surface-border">
+            <span class="text-600 font-medium">Precio Cierre</span>
+            <span class="font-semibold text-700">${{ summary.data.price.closePrice | number:'1.2-2' }}</span>
+          </div>
+        </div>
+        <div class="col-12 md:col-6 lg:col-4">
+          <div class="flex justify-content-between align-items-center py-2 border-bottom-1 surface-border">
+            <span class="text-600 font-medium">Máximo del Día</span>
+            <span class="font-semibold text-700">${{ summary.data.price.maxDay | number:'1.2-2' }}</span>
+          </div>
+        </div>
+        <div class="col-12 md:col-6 lg:col-4">
+          <div class="flex justify-content-between align-items-center py-2 border-bottom-1 surface-border">
+            <span class="text-600 font-medium">Mínimo del Día</span>
+            <span class="font-semibold text-700">${{ summary.data.price.minDay | number:'1.2-2' }}</span>
+          </div>
+        </div>
+        <div class="col-12 md:col-6 lg:col-4">
+          <div class="flex justify-content-between align-items-center py-2 border-bottom-1 surface-border">
+            <span class="text-600 font-medium">Variación Diaria</span>
+            <span class="font-semibold" 
+                  [ngClass]="{
+                    'text-green-600': summary.data.price.performanceRelative > 0,
+                    'text-red-600': summary.data.price.performanceRelative < 0,
+                    'text-600': summary.data.price.performanceRelative === 0
+                  }">
+              {{ summary.data.price.performanceRelative > 0 ? '+' : '' }}{{ summary.data.price.performanceRelative | number:'1.2-2' }}%
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 52 Week Range -->
+    <div *ngIf="summary.data.price && (summary.data.price.min52W || summary.data.price.max52W)" class="mb-4">
+      <h4 class="text-lg font-medium text-700 mb-3">Rango 52 Semanas</h4>
+      <div class="grid">
+        <div class="col-12 md:col-6">
+          <div class="flex justify-content-between align-items-center py-2 border-bottom-1 surface-border">
+            <span class="text-600 font-medium">Mínimo 52S</span>
+            <span class="font-semibold text-700">${{ summary.data.price.min52W | number:'1.2-2' }}</span>
+          </div>
+        </div>
+        <div class="col-12 md:col-6">
+          <div class="flex justify-content-between align-items-center py-2 border-bottom-1 surface-border">
+            <span class="text-600 font-medium">Máximo 52S</span>
+            <span class="font-semibold text-700">${{ summary.data.price.max52W | number:'1.2-2' }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Volume Information -->
+    <div *ngIf="summary.data.price && (summary.data.price.volumeMoney || summary.data.price.accumulatedVolumeMoney)" class="mb-4">
+      <h4 class="text-lg font-medium text-700 mb-3">Información de Volumen</h4>
+      <div class="grid">
+        <div class="col-12 md:col-6">
+          <div class="flex justify-content-between align-items-center py-2 border-bottom-1 surface-border">
+            <span class="text-600 font-medium">Volumen Diario</span>
+            <span class="font-semibold text-700">${{ summary.data.price.volumeMoney | number:'1.0-0' }}</span>
+          </div>
+        </div>
+        <div class="col-12 md:col-6">
+          <div class="flex justify-content-between align-items-center py-2 border-bottom-1 surface-border">
+            <span class="text-600 font-medium">Volumen Acumulado</span>
+            <span class="font-semibold text-700">${{ summary.data.price.accumulatedVolumeMoney | number:'1.0-0' }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Market Information -->
+    <div *ngIf="summary.data.info" class="mb-4">
+      <h4 class="text-lg font-medium text-700 mb-3">Información del Mercado</h4>
+      <div class="grid">
+        <div class="col-12 md:col-6 lg:col-4">
+          <div class="flex justify-content-between align-items-center py-2 border-bottom-1 surface-border">
+            <span class="text-600 font-medium">Mercado</span>
+            <span class="font-semibold text-700">{{ summary.data.info.marketName }}</span>
+          </div>
+        </div>
+        <div class="col-12 md:col-6 lg:col-4">
+          <div class="flex justify-content-between align-items-center py-2 border-bottom-1 surface-border">
+            <span class="text-600 font-medium">Moneda</span>
+            <span class="font-semibold text-700">{{ summary.data.info.currencyName }}</span>
+          </div>
+        </div>
+        <div class="col-12 md:col-6 lg:col-4">
+          <div class="flex justify-content-between align-items-center py-2 border-bottom-1 surface-border">
+            <span class="text-600 font-medium">Horario</span>
+            <span class="font-semibold text-700">{{ summary.data.info.hourOpen }} - {{ summary.data.info.hourClose }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <ng-template #noSummary>
+    <div class="no-summary text-center py-6">
+      <i class="pi pi-info-circle text-6xl text-300 mb-3"></i>
+      <h3 class="text-xl text-500 m-0">No hay datos de resumen</h3>
+      <p class="text-sm text-400 mt-2 m-0">Selecciona un instrumento para ver su información detallada</p>
+    </div>
+  </ng-template>
+</div>

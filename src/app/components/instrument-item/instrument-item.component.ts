@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-instrument-item',
@@ -8,4 +8,11 @@ import { Component } from '@angular/core';
 })
 export class InstrumentItemComponent {
 
+  @Input() instrument: any = null;
+  @Input() isSelected: boolean = false;
+  @Output() clicked = new EventEmitter<any>();
+
+  onItemClick(): void {
+    this.clicked.emit(this.instrument);
+  }
 }

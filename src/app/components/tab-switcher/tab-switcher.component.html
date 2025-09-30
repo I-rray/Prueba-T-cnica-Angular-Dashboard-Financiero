@@ -1,1 +1,14 @@
-<p>TabSwitcher placeholder</p>
+<div class="tab-switcher-container">
+  <div class="flex gap-2">
+    <button 
+      *ngFor="let index of indices" 
+      class="p-button p-button-sm border-round"
+      [ngClass]="{
+        'p-button-outlined': index !== selectedIndex,
+        'p-button-primary': index === selectedIndex
+      }"
+      (click)="onTabClick(index)">
+      {{ index }}
+    </button>
+  </div>
+</div>

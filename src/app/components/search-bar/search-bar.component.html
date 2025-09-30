@@ -1,1 +1,11 @@
-<p>SearchBar placeholder</p>
+<div class="search-container w-full md:w-20rem">
+  <span class="p-input-icon-left w-full">
+    <i class="pi pi-search"></i>
+    <input 
+      type="text" 
+      class="p-inputtext p-component w-full"
+      placeholder="Buscar instrumentos..." 
+      (input)="onInputChange($event)"
+      #searchInput>
+  </span>
+</div>
