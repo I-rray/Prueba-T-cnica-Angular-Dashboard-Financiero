@@ -1,8 +1,8 @@
 <div class="tab-switcher-container">
-  <div class="flex gap-2">
+  <div class="flex gap-1">
     <button 
       *ngFor="let index of indices" 
-      class="p-button p-button-sm border-round"
+      class="p-button p-button-sm p-button-text border-round px-3 py-1"
       [ngClass]="{
         'p-button-outlined': index !== selectedIndex,
         'p-button-primary': index === selectedIndex

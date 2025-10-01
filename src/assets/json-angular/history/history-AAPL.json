@@ -1,0 +1,52 @@
+{
+  "success": true,
+  "code": 200,
+  "data": {
+    "info": {
+      "instrument": "AAPL",
+      "market": "NASDAQ"
+    },
+    "chart": [
+      {
+        "datetimeLastPrice": "2024-10-07T13:30:00.000Z",
+        "lastPrice": 220.50,
+        "highPrice": 222.15,
+        "lowPrice": 219.80,
+        "openPrice": 221.00,
+        "closePrice": 220.50,
+        "volume": 45000000,
+        "performance": -0.23
+      },
+      {
+        "datetimeLastPrice": "2024-10-08T13:30:00.000Z",
+        "lastPrice": 222.80,
+        "highPrice": 224.20,
+        "lowPrice": 220.50,
+        "openPrice": 220.50,
+        "closePrice": 222.80,
+        "volume": 52000000,
+        "performance": 1.04
+      },
+      {
+        "datetimeLastPrice": "2024-10-09T13:30:00.000Z",
+        "lastPrice": 221.95,
+        "highPrice": 223.50,
+        "lowPrice": 221.20,
+        "openPrice": 222.80,
+        "closePrice": 221.95,
+        "volume": 48000000,
+        "performance": -0.38
+      },
+      {
+        "datetimeLastPrice": "2024-11-06T14:00:00.000Z",
+        "lastPrice": 224.85,
+        "highPrice": 226.10,
+        "lowPrice": 223.40,
+        "openPrice": 223.80,
+        "closePrice": 224.85,
+        "volume": 58000000,
+        "performance": 1.31
+      }
+    ]
+  }
+}

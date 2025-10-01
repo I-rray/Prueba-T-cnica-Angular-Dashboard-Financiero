@@ -1,8 +1,9 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-instrument-item',
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './instrument-item.component.html',
   styleUrl: './instrument-item.component.scss'
 })

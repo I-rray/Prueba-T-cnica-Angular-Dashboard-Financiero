@@ -1,47 +1,60 @@
-<div class="flex justify-content-center min-h-screen bg-gray-50">
+<div class="flex justify-content-center min-h-screen surface-ground">
   <div class="w-full max-w-6xl p-4">
-    <!-- Control Area: SearchBar + Tabs -->
-    <div class="mb-4 p-3 bg-white border-round shadow-1">
+    <!-- Control Area: SearchBar only -->
+    <div class="mb-4 p-3 surface-card border-round shadow-1">
       <div class="flex flex-column md:flex-row gap-3 align-items-start md:align-items-center">
         <div class="flex-1">
           <app-search-bar (queryChange)="onQueryChange($event)"></app-search-bar>
         </div>
-        <div class="flex-shrink-0">
-          <app-tab-switcher 
-            [indices]="indices" 
-            [selectedIndex]="marketStore.selectedIndex()" 
-            (indexChange)="onIndexChange($event)">
-          </app-tab-switcher>
-        </div>
       </div>
     </div>
 
-    <!-- Header Area: Main Summary -->
-    <div class="mb-4 p-3 bg-white border-round shadow-1">
-      <app-header [instrument]="marketStore.selectedInstrument()"></app-header>
-    </div>
+    <!-- Main Content Grid -->
+    <div class="grid">
+      <!-- Left Column: Chart and Instrument List -->
+      <div class="col-12 lg:col-8">
+        <!-- Header Area: Main Summary -->
+        <div class="mb-4 p-3 surface-card border-round shadow-1">
+          <app-header 
+            [instrument]="marketStore.selectedInstrument()"
+            [indexTitle]="indexTitle()">
+          </app-header>
+        </div>
 
-    <!-- Chart Area: Evolution -->
-    <div class="mb-4 p-3 bg-white border-round shadow-1">
-      <app-chart 
-        [points]="marketStore.history()" 
-        [period]="marketStore.period()" 
-        (periodChange)="onPeriodChange($event)">
-      </app-chart>
-    </div>
+        <!-- Chart Area: Evolution -->
+        <div class="mb-4 p-3 surface-card border-round shadow-1 chart-container">
+          <app-chart 
+            [points]="chartPoints()" 
+            [period]="marketStore.period()" 
+            (periodChange)="onPeriodChange($event)">
+          </app-chart>
+        </div>
 
-    <!-- Summary Area: Details -->
-    <div class="mb-4 p-3 bg-white border-round shadow-1">
-      <app-summary [summary]="marketStore.summary()"></app-summary>
-    </div>
+        <!-- Index Filter Bar: Below Chart -->
+        <div class="mb-4 p-3 surface-card border-round shadow-1">
+          <app-tab-switcher 
+            [indices]="indices" 
+            [selectedIndex]="marketStore.selectedIndex()"
+            (indexChange)="onIndexChange($event)">
+          </app-tab-switcher>
+        </div>
 
-    <!-- Instrument List Area: Table with Scroll -->
-    <div class="p-3 bg-white border-round shadow-1">
-      <app-instrument-list 
-        [instruments]="filteredInstruments()" 
-        [selectedInstrument]="marketStore.selectedInstrument()"
-        (select)="onInstrumentSelect($event)">
-      </app-instrument-list>
+        <!-- Instrument List Area: Below Index Filter -->
+        <div class="mb-4 p-3 surface-card border-round shadow-1" style="height: fit-content; max-height: 60vh; overflow-y: auto;">
+          <app-instrument-list 
+            [instruments]="filteredInstruments()" 
+            [selectedInstrument]="marketStore.selectedInstrument()"
+            (select)="onInstrumentSelect($event)">
+          </app-instrument-list>
+        </div>
+      </div>
+
+      <!-- Right Column: Summary Details -->
+      <div class="col-12 lg:col-4">
+        <div class="p-3 surface-card border-round shadow-1">
+          <app-summary [summary]="marketStore.summary()"></app-summary>
+        </div>
+      </div>
     </div>
   </div>
 </div>

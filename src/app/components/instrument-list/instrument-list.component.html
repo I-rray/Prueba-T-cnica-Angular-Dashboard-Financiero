@@ -1,27 +1,168 @@
-<div class="instrument-list-container h-30rem overflow-auto border-1 border-300 border-round">
-  <!-- Table Header -->
-  <div class="instrument-list-header sticky top-0 bg-white border-bottom-1 border-300 p-2">
-    <div class="grid align-items-center">
-      <div class="col-4 text-left font-semibold">Instrumento</div>
-      <div class="col-2 text-right font-semibold">Precio</div>
-      <div class="col-2 text-right font-semibold">Var. Día</div>
-      <div class="col-2 text-right font-semibold">Var. %</div>
-      <div class="col-2 text-right font-semibold">Volumen</div>
+<div class="instrument-list-container">
+  <!-- Two-column grid for side-by-side tables -->
+  <div class="tables-grid">
+    
+    <!-- Left Table -->
+    <div class="table-wrapper">
+      <div class="table-container">
+        <table class="tbl">
+          <!-- Header -->
+          <thead class="tbl-head sticky">
+            <tr>
+              <th 
+                *ngFor="let col of columns" 
+                (click)="onSort(col.key)"
+                [class.sortable]="true"
+                class="th-cell">
+                {{ col.label }}
+                <span class="sort-icon">{{ getSortIcon(col.key) }}</span>
+              </th>
+            </tr>
+          </thead>
+          
+          <!-- Body -->
+          <tbody>
+            <tr 
+              *ngFor="let row of leftTableData; trackBy: trackByInstrument"
+              class="tbl-row"
+              [class.is-selected]="isSelected(row)"
+              [attr.aria-selected]="isSelected(row)"
+              (click)="onRowClick(row)">
+              
+              <!-- Nombre/Símbolo -->
+              <td class="td-cell">
+                <div class="name-cell">
+                  <div class="n1">{{ row.shortName }}</div>
+                  <div class="n2">{{ row.codeInstrument }}</div>
+                </div>
+              </td>
+              
+              <!-- Último -->
+              <td class="td-cell text-right" [title]="row.lastPrice">
+                {{ fmtNum2(row.lastPrice) }}
+              </td>
+              
+              <!-- Monto (MM) -->
+              <td class="td-cell text-right" [title]="row.volumeMoney">
+                {{ fmtMM(row.volumeMoney) }}
+              </td>
+              
+              <!-- Var día % -->
+              <td class="td-cell text-right" [title]="row.pctDay">
+                <span [ngClass]="valClass(row.pctDay)">{{ fmtPct(row.pctDay) }}</span>
+              </td>
+              
+              <!-- Var 30d % -->
+              <td class="td-cell text-right" [title]="row.pct30D">
+                <span [ngClass]="valClass(row.pct30D)">{{ fmtPct(row.pct30D) }}</span>
+              </td>
+              
+              <!-- Año actual % -->
+              <td class="td-cell text-right" [title]="row.pctCY">
+                <span [ngClass]="valClass(row.pctCY)">{{ fmtPct(row.pctCY) }}</span>
+              </td>
+              
+              <!-- 12 meses % -->
+              <td class="td-cell text-right" [title]="row.pct1Y">
+                <span [ngClass]="valClass(row.pct1Y)">{{ fmtPct(row.pct1Y) }}</span>
+              </td>
+            </tr>
+            
+            <!-- Empty state for left table -->
+            <tr *ngIf="leftTableData.length === 0">
+              <td colspan="7" class="text-center empty-state">
+                No hay instrumentos disponibles
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
+    
+    <!-- Right Table -->
+    <div class="table-wrapper">
+      <div class="table-container">
+        <table class="tbl">
+          <!-- Header -->
+          <thead class="tbl-head sticky">
+            <tr>
+              <th 
+                *ngFor="let col of columns" 
+                (click)="onSort(col.key)"
+                [class.sortable]="true"
+                class="th-cell">
+                {{ col.label }}
+                <span class="sort-icon">{{ getSortIcon(col.key) }}</span>
+              </th>
+            </tr>
+          </thead>
+          
+          <!-- Body -->
+          <tbody>
+            <tr 
+              *ngFor="let row of rightTableData; trackBy: trackByInstrument"
+              class="tbl-row"
+              [class.is-selected]="isSelected(row)"
+              [attr.aria-selected]="isSelected(row)"
+              (click)="onRowClick(row)">
+              
+              <!-- Nombre/Símbolo -->
+              <td class="td-cell">
+                <div class="name-cell">
+                  <div class="n1">{{ row.shortName }}</div>
+                  <div class="n2">{{ row.codeInstrument }}</div>
+                </div>
+              </td>
+              
+              <!-- Último -->
+              <td class="td-cell text-right" [title]="row.lastPrice">
+                {{ fmtNum2(row.lastPrice) }}
+              </td>
+              
+              <!-- Monto (MM) -->
+              <td class="td-cell text-right" [title]="row.volumeMoney">
+                {{ fmtMM(row.volumeMoney) }}
+              </td>
+              
+              <!-- Var día % -->
+              <td class="td-cell text-right" [title]="row.pctDay">
+                <span [ngClass]="valClass(row.pctDay)">{{ fmtPct(row.pctDay) }}</span>
+              </td>
+              
+              <!-- Var 30d % -->
+              <td class="td-cell text-right" [title]="row.pct30D">
+                <span [ngClass]="valClass(row.pct30D)">{{ fmtPct(row.pct30D) }}</span>
+              </td>
+              
+              <!-- Año actual % -->
+              <td class="td-cell text-right" [title]="row.pctCY">
+                <span [ngClass]="valClass(row.pctCY)">{{ fmtPct(row.pctCY) }}</span>
+              </td>
+              
+              <!-- 12 meses % -->
+              <td class="td-cell text-right" [title]="row.pct1Y">
+                <span [ngClass]="valClass(row.pct1Y)">{{ fmtPct(row.pct1Y) }}</span>
+              </td>
+            </tr>
+            
+            <!-- Empty state for right table -->
+            <tr *ngIf="rightTableData.length === 0">
+              <td colspan="7" class="text-center empty-state">
+                &nbsp;
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    
   </div>
   
-  <!-- Table Body -->
-  <div class="instrument-list-body">
-    <app-instrument-item 
-      *ngFor="let instrument of instruments; trackBy: trackByInstrument" 
-      [instrument]="instrument" 
-      [isSelected]="selectedInstrument?.codeInstrument === instrument.codeInstrument"
-      (clicked)="onInstrumentClicked($event)">
-    </app-instrument-item>
-    
-    <!-- Empty state -->
-    <div *ngIf="instruments.length === 0" class="text-center p-4 text-500">
-      No hay instrumentos disponibles
-    </div>
+  <!-- Footer with legend -->
+  <div class="table-footer">
+    <p class="footer-text">
+      Último precio, Monto Transado y Variación diaria con desfase de 15 minutos. 
+      Haz click en cada instrumento para ver información actualizada en el gráfico.
+    </p>
   </div>
 </div>

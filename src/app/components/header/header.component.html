@@ -1,99 +1,64 @@
-<div class="header-container">
-  <div *ngIf="instrument; else noInstrument" class="instrument-header">
-    <!-- Symbol and Name -->
-    <div class="flex flex-column md:flex-row md:align-items-center gap-3 mb-3">
-      <div class="flex-1">
-        <h1 class="text-3xl font-bold text-900 m-0 mb-1">{{ instrument.shortName || instrument.symbol }}</h1>
-        <p class="text-lg text-600 m-0">{{ instrument.name }}</p>
-      </div>
+<div *ngIf="instrument; else noInstrument">
+  <!-- Fila 1: Títulos -->
+  <div class="title-row">
+    <h1 class="index-title">{{ indexTitle }}, CHILE</h1>
+    <h2 class="inst-name">{{ instrument.name }}</h2>
+  </div>
+
+  <!-- Fila 2: Precio y KPIs -->
+  <div class="price-kpis-row">
+    <div class="price-section">
+      <div class="last-price">${{ instrument.lastPrice | number:'1.2-2' }}</div>
+      <div class="last-dt">{{ instrument.datetimeLastPrice }}</div>
     </div>
 
-    <!-- Price and Performance -->
-    <div class="flex flex-column md:flex-row gap-4 align-items-start md:align-items-center">
-      <!-- Current Price -->
-      <div class="flex-shrink-0">
-        <div class="text-4xl font-bold text-900 mb-1">
-          ${{ instrument.lastPrice | number:'1.2-2' }}
-        </div>
-        <div class="text-sm text-500">
-          {{ instrument.datetimeLastPrice }}
+    <div class="kpis">
+      <div class="kpi" *ngIf="isNumber(instrument.pctDay)">
+        <div class="kpi-label">Día</div>
+        <div class="kpi-val" [ngClass]="signClass(instrument.pctDay)">
+          {{ signed(instrument.pctDay) }}%
         </div>
       </div>
 
-      <!-- Performance Indicators -->
-      <div class="flex gap-4 flex-wrap">
-        <!-- Daily Change -->
-        <div class="flex flex-column align-items-center" *ngIf="instrument.pctDay !== undefined">
-          <span class="text-sm text-500 mb-1">Día</span>
-          <span class="font-semibold" 
-                [ngClass]="{
-                  'text-green-600': instrument.pctDay > 0,
-                  'text-red-600': instrument.pctDay < 0,
-                  'text-600': instrument.pctDay === 0
-                }">
-            {{ instrument.pctDay > 0 ? '+' : '' }}{{ instrument.pctDay | number:'1.2-2' }}%
-          </span>
-        </div>
-
-        <!-- 30 Day Change -->
-        <div class="flex flex-column align-items-center" *ngIf="instrument.pct30D !== undefined">
-          <span class="text-sm text-500 mb-1">30D</span>
-          <span class="font-semibold" 
-                [ngClass]="{
-                  'text-green-600': instrument.pct30D > 0,
-                  'text-red-600': instrument.pct30D < 0,
-                  'text-600': instrument.pct30D === 0
-                }">
-            {{ instrument.pct30D > 0 ? '+' : '' }}{{ instrument.pct30D | number:'1.2-2' }}%
-          </span>
-        </div>
-
-        <!-- Year to Date -->
-        <div class="flex flex-column align-items-center" *ngIf="instrument.pctCY !== undefined">
-          <span class="text-sm text-500 mb-1">YTD</span>
-          <span class="font-semibold" 
-                [ngClass]="{
-                  'text-green-600': instrument.pctCY > 0,
-                  'text-red-600': instrument.pctCY < 0,
-                  'text-600': instrument.pctCY === 0
-                }">
-            {{ instrument.pctCY > 0 ? '+' : '' }}{{ instrument.pctCY | number:'1.2-2' }}%
-          </span>
-        </div>
-
-        <!-- 1 Year -->
-        <div class="flex flex-column align-items-center" *ngIf="instrument.pct1Y !== undefined">
-          <span class="text-sm text-500 mb-1">1A</span>
-          <span class="font-semibold" 
-                [ngClass]="{
-                  'text-green-600': instrument.pct1Y > 0,
-                  'text-red-600': instrument.pct1Y < 0,
-                  'text-600': instrument.pct1Y === 0
-                }">
-            {{ instrument.pct1Y > 0 ? '+' : '' }}{{ instrument.pct1Y | number:'1.2-2' }}%
-          </span>
+      <div class="kpi" *ngIf="isNumber(instrument.pct30D)">
+        <div class="kpi-label">30D</div>
+        <div class="kpi-val" [ngClass]="signClass(instrument.pct30D)">
+          {{ signed(instrument.pct30D) }}%
         </div>
       </div>
-    </div>
 
-    <!-- Volume Information -->
-    <div class="flex gap-4 mt-3 pt-3 border-top-1 surface-border" *ngIf="instrument.volumeMoney || instrument.accumulatedVolumeMoney">
-      <div class="flex flex-column" *ngIf="instrument.volumeMoney">
-        <span class="text-sm text-500 mb-1">Volumen Diario</span>
-        <span class="font-medium text-900">${{ instrument.volumeMoney | number:'1.0-0' }}</span>
+      <div class="kpi" *ngIf="isNumber(instrument.pctCY)">
+        <div class="kpi-label">YTD</div>
+        <div class="kpi-val" [ngClass]="signClass(instrument.pctCY)">
+          {{ signed(instrument.pctCY) }}%
+        </div>
       </div>
-      <div class="flex flex-column" *ngIf="instrument.accumulatedVolumeMoney">
-        <span class="text-sm text-500 mb-1">Volumen Acumulado</span>
-        <span class="font-medium text-900">${{ instrument.accumulatedVolumeMoney | number:'1.0-0' }}</span>
+
+      <div class="kpi" *ngIf="isNumber(instrument.pct1Y)">
+        <div class="kpi-label">1A</div>
+        <div class="kpi-val" [ngClass]="signClass(instrument.pct1Y)">
+          {{ signed(instrument.pct1Y) }}%
+        </div>
       </div>
     </div>
   </div>
-  
-  <ng-template #noInstrument>
-    <div class="no-instrument text-center py-6">
-      <i class="pi pi-chart-line text-6xl text-300 mb-3"></i>
-      <h3 class="text-xl text-500 m-0">Selecciona un instrumento</h3>
-      <p class="text-sm text-400 mt-2 m-0">Elige un instrumento de la lista para ver su información detallada</p>
+
+  <!-- Fila 3: Volúmenes -->
+  <div class="vol-row" *ngIf="isNumber(instrument.volumeMoney) || isNumber(instrument.accumulatedVolumeMoney)">
+    <div class="vol-box" *ngIf="isNumber(instrument.volumeMoney)">
+      <div class="vol-label">Volumen Diario</div>
+      <div class="vol-val">${{ instrument.volumeMoney | number:'1.0-0' }}</div>
     </div>
-  </ng-template>
+
+    <div class="vol-box" *ngIf="isNumber(instrument.accumulatedVolumeMoney)">
+      <div class="vol-label">Volumen Acumulado</div>
+      <div class="vol-val">${{ instrument.accumulatedVolumeMoney | number:'1.0-0' }}</div>
+    </div>
+  </div>
 </div>
+
+<ng-template #noInstrument>
+  <div class="placeholder">
+    <p>Selecciona un instrumento</p>
+  </div>
+</ng-template>

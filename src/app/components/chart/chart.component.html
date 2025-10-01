@@ -1,81 +1,32 @@
 <div class="chart-container">
-  <!-- Period Navigation -->
-  <div class="flex justify-content-between align-items-center mb-3">
-    <h3 class="text-xl font-semibold text-900 m-0">Evolución del Precio</h3>
-    <div class="flex gap-2">
-      <button 
-        *ngFor="let p of periods" 
-        class="p-button p-button-sm border-round"
-        [ngClass]="{
-          'p-button-outlined': p !== period,
-          'p-button-primary': p === period
-        }"
-        (click)="onPeriodClick(p)">
-        {{ p }}
-      </button>
+  <!-- Chart Area -->
+  <div class="chart-content">
+    <!-- Chart Canvas -->
+    <div *ngIf="hasData" class="chart-wrapper">
+      <canvas #chartCanvas></canvas>
+    </div>
+
+    <!-- No Data State -->
+    <div *ngIf="!hasData" class="no-data-state">
+      <i class="chart-icon">📊</i>
+      <p class="no-data-text">No hay datos disponibles para el período seleccionado</p>
     </div>
   </div>
-  
-  <!-- Chart Area with Fixed Height -->
-  <div class="chart-content border-round surface-border border-1 p-3" 
-       style="height: 280px; min-height: 280px;">
-    
-    <!-- Chart Placeholder with Data Info -->
-    <div class="flex flex-column justify-content-center align-items-center h-full text-center">
-      <i class="pi pi-chart-line text-6xl text-300 mb-3"></i>
-      
-      <div class="mb-3">
-        <h4 class="text-lg font-medium text-700 m-0 mb-2">
-          Datos del Período: {{ period }}
-        </h4>
-        <p class="text-600 m-0">
-          {{ filteredPoints.length }} puntos de datos disponibles
-        </p>
-      </div>
-      
-      <!-- Data Preview -->
-      <div *ngIf="filteredPoints.length > 0" class="w-full max-w-30rem">
-        <div class="grid">
-          <div class="col-6">
-            <div class="p-3 border-round surface-100">
-              <h5 class="text-sm font-medium text-500 m-0 mb-2">Primer Punto</h5>
-              <div class="text-sm text-700">
-                <div *ngIf="filteredPoints[0].date">
-                  <strong>Fecha:</strong> {{ filteredPoints[0].date }}
-                </div>
-                <div *ngIf="filteredPoints[0].value !== undefined">
-                  <strong>Valor:</strong> {{ filteredPoints[0].value | number:'1.2-2' }}
-                </div>
-                <div *ngIf="filteredPoints[0].price !== undefined">
-                  <strong>Precio:</strong> ${{ filteredPoints[0].price | number:'1.2-2' }}
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          <div class="col-6">
-            <div class="p-3 border-round surface-100">
-              <h5 class="text-sm font-medium text-500 m-0 mb-2">Último Punto</h5>
-              <div class="text-sm text-700">
-                <div *ngIf="filteredPoints[filteredPoints.length - 1].date">
-                  <strong>Fecha:</strong> {{ filteredPoints[filteredPoints.length - 1].date }}
-                </div>
-                <div *ngIf="filteredPoints[filteredPoints.length - 1].value !== undefined">
-                  <strong>Valor:</strong> {{ filteredPoints[filteredPoints.length - 1].value | number:'1.2-2' }}
-                </div>
-                <div *ngIf="filteredPoints[filteredPoints.length - 1].price !== undefined">
-                  <strong>Precio:</strong> ${{ filteredPoints[filteredPoints.length - 1].price | number:'1.2-2' }}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      
-      <!-- No Data Message -->
-      <div *ngIf="filteredPoints.length === 0" class="text-500">
-        <p class="m-0">No hay datos disponibles para el período seleccionado</p>
-      </div>
-    </div>
+
+  <!-- Period Navigation Buttons -->
+  <div class="period-buttons">
+    <button 
+      *ngFor="let p of periods" 
+      type="button"
+      class="period-btn"
+      [class.active]="period === p"
+      (click)="onPeriodClick(p)">
+      {{ p }}
+    </button>
+  </div>
+
+  <!-- Point Counter -->
+  <div class="point-counter">
+    <span>Período: <strong>{{ period }}</strong> | Puntos: <strong>{{ pointsCount }}</strong></span>
   </div>
 </div>

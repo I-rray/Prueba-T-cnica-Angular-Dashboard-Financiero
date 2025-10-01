@@ -10,4 +10,10 @@ import { CommonModule } from '@angular/common';
 export class SummaryComponent {
 
   @Input() summary: any = null;
+  
+  activeTab: 'resumen' | 'detalles' = 'resumen';
+
+  setActiveTab(tab: 'resumen' | 'detalles'): void {
+    this.activeTab = tab;
+  }
 }

@@ -7,7 +7,7 @@ import { SummaryComponent } from '../../components/summary/summary.component';
 import { InstrumentListComponent } from '../../components/instrument-list/instrument-list.component';
 import { MarketStore } from '../../core/state/market.store';
 
-type Period = '1M' | '3M' | '6M' | '1A';
+type Period = '1D' | '1S' | '1M' | '3M' | '6M' | '1A' | '5A';
 
 @Component({
   selector: 'app-dashboard-page',
@@ -36,14 +36,46 @@ export class DashboardPageComponent {
       return instruments;
     }
     
-    return instruments.filter(instrument => 
-      instrument?.symbol?.toLowerCase().includes(searchQuery) ||
+    return instruments.filter((instrument: any) => 
+      instrument?.codeInstrument?.toLowerCase().includes(searchQuery) ||
+      instrument?.shortName?.toLowerCase().includes(searchQuery) ||
       instrument?.name?.toLowerCase().includes(searchQuery)
     );
   });
 
-  // Índices estáticos (fallback si no hay lista)
-  public indices = ['IPSA'];
+  // Computed para el título del índice
+  indexTitle = computed(() => {
+    const selectedIndex = this.marketStore.selectedIndex();
+    return `${selectedIndex}, CHILE`;
+  });
+
+  // Computed property para mapear history a formato de chart
+  chartPoints = computed(() => {
+    const historyResponse = this.marketStore.history();
+    
+    // Verificar si historyResponse es un objeto con data.chart o un array directo
+    let historyArray: any[] = [];
+    
+    if (historyResponse && typeof historyResponse === 'object') {
+      if (Array.isArray(historyResponse)) {
+        // Es un array directo
+        historyArray = historyResponse;
+      } else if ((historyResponse as any).data && (historyResponse as any).data.chart) {
+        // Es un objeto con data.chart
+        historyArray = (historyResponse as any).data.chart;
+      }
+    }
+    
+    if (!Array.isArray(historyArray) || historyArray.length === 0) return [];
+    
+    return historyArray.map((item: any) => ({
+      t: item.datetimeLastPrice,
+      v: item.lastPrice
+    }));
+  });
+
+  // Índices estáticos según requerimientos
+  public indices = ['IPSA', 'IGPA', 'NASDAQ', 'DOW JONES', 'SP/BVL'];
 
   constructor(public marketStore: MarketStore) {}
 
@@ -57,12 +89,14 @@ export class DashboardPageComponent {
   }
 
   onInstrumentSelect(instrument: any): void {
-    if (instrument?.symbol) {
-      this.marketStore.selectInstrument(instrument.symbol);
+    if (instrument?.codeInstrument) {
+      this.marketStore.selectInstrument(instrument.codeInstrument);
     }
   }
 
   onPeriodChange(period: Period): void {
+    // Para los nuevos periodos 1D y 1S, también llamar a setPeriod
+    // La store solo guarda el valor; el slicing lo hace el chart
     this.marketStore.setPeriod(period);
   }
 }

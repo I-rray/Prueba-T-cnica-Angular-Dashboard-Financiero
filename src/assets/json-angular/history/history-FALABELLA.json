@@ -1,0 +1,72 @@
+{
+  "success": true,
+  "code": 200,
+  "data": {
+    "info": {
+      "instrument": "FALABELLA",
+      "market": "Santiago Stock Exchange"
+    },
+    "chart": [
+      {
+        "datetimeLastPrice": "2024-10-07T09:30:00.000Z",
+        "lastPrice": 3180,
+        "highPrice": 3195,
+        "lowPrice": 3165,
+        "openPrice": 3175,
+        "closePrice": 3180,
+        "volume": 125000,
+        "performance": 0.5
+      },
+      {
+        "datetimeLastPrice": "2024-10-08T09:30:00.000Z",
+        "lastPrice": 3195,
+        "highPrice": 3210,
+        "lowPrice": 3175,
+        "openPrice": 3180,
+        "closePrice": 3195,
+        "volume": 142000,
+        "performance": 0.47
+      },
+      {
+        "datetimeLastPrice": "2024-10-09T09:30:00.000Z",
+        "lastPrice": 3205,
+        "highPrice": 3220,
+        "lowPrice": 3190,
+        "openPrice": 3195,
+        "closePrice": 3205,
+        "volume": 158000,
+        "performance": 0.31
+      },
+      {
+        "datetimeLastPrice": "2024-10-10T09:30:00.000Z",
+        "lastPrice": 3185,
+        "highPrice": 3205,
+        "lowPrice": 3170,
+        "openPrice": 3205,
+        "closePrice": 3185,
+        "volume": 167000,
+        "performance": -0.62
+      },
+      {
+        "datetimeLastPrice": "2024-10-11T09:30:00.000Z",
+        "lastPrice": 3220,
+        "highPrice": 3235,
+        "lowPrice": 3185,
+        "openPrice": 3185,
+        "closePrice": 3220,
+        "volume": 189000,
+        "performance": 1.1
+      },
+      {
+        "datetimeLastPrice": "2024-11-06T09:30:00.000Z",
+        "lastPrice": 3250,
+        "highPrice": 3265,
+        "lowPrice": 3235,
+        "openPrice": 3240,
+        "closePrice": 3250,
+        "volume": 195000,
+        "performance": 0.93
+      }
+    ]
+  }
+}

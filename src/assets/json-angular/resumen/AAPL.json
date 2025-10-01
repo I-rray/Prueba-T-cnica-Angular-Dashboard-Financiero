@@ -1,0 +1,25 @@
+{
+  "success": true,
+  "code": 200,
+  "data": {
+    "info": {
+      "instrument": "AAPL",
+      "market": "NASDAQ"
+    },
+    "resumen": {
+      "lastPrice": 224.85,
+      "pctDay": 1.5,
+      "performanceAbsolute": 3.32,
+      "performanceRelative": 1.5,
+      "openPrice": 223.80,
+      "closePrice": 221.53,
+      "highPrice": 226.10,
+      "lowPrice": 223.40,
+      "high52Week": 237.23,
+      "low52Week": 164.08,
+      "volume": 58000000,
+      "volumeMoney": 45000000,
+      "datetimeLastPrice": "06-11-2024 16:00:00"
+    }
+  }
+}

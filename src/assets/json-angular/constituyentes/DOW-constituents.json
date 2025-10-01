@@ -1,0 +1,62 @@
+{
+  "success": true,
+  "code": 200,
+  "data": {
+    "info": {
+      "name": "DOW JONES",
+      "shortName": "DOW",
+      "countryName": "United States",
+      "codeInstrument": "DOW"
+    },
+    "constituents": [
+      {
+        "codeInstrument": "JPM",
+        "name": "JPMORGAN CHASE & CO.",
+        "shortName": "JPM",
+        "pctDay": 0.9,
+        "pct30D": 6.8,
+        "pctCY": 28.5,
+        "pct1Y": 42.1,
+        "lastPrice": 218.75,
+        "datetimeLastPrice": "06-11-2024 16:00:00",
+        "volumeMoney": 15000000,
+        "accumulatedVolumeMoney": 4200000000,
+        "tend": "up",
+        "performanceAbsolute": 1.95,
+        "performanceRelative": 0.9
+      },
+      {
+        "codeInstrument": "JNJ",
+        "name": "JOHNSON & JOHNSON",
+        "shortName": "JNJ",
+        "pctDay": -0.3,
+        "pct30D": 2.1,
+        "pctCY": 8.7,
+        "pct1Y": 15.2,
+        "lastPrice": 158.90,
+        "datetimeLastPrice": "06-11-2024 16:00:00",
+        "volumeMoney": 8500000,
+        "accumulatedVolumeMoney": 2800000000,
+        "tend": "down",
+        "performanceAbsolute": -0.48,
+        "performanceRelative": -0.3
+      },
+      {
+        "codeInstrument": "WMT",
+        "name": "WALMART INC.",
+        "shortName": "WMT",
+        "pctDay": 1.2,
+        "pct30D": 9.5,
+        "pctCY": 58.2,
+        "pct1Y": 65.8,
+        "lastPrice": 84.25,
+        "datetimeLastPrice": "06-11-2024 16:00:00",
+        "volumeMoney": 12000000,
+        "accumulatedVolumeMoney": 3500000000,
+        "tend": "up",
+        "performanceAbsolute": 1.00,
+        "performanceRelative": 1.2
+      }
+    ]
+  }
+}

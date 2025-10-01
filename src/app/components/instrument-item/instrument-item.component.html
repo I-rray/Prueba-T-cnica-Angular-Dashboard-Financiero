@@ -5,25 +5,14 @@
   (click)="onItemClick()">
   
   <!-- Instrument Name and Symbol -->
-  <div class="col-4 text-left">
+  <div class="col-3 text-left">
     <div class="font-medium text-900">{{ instrument?.shortName || instrument?.name || 'N/A' }}</div>
     <div class="text-sm text-500">{{ instrument?.codeInstrument || 'N/A' }}</div>
   </div>
   
   <!-- Last Price -->
-  <div class="col-2 text-right">
-    <div class="font-medium">{{ instrument?.lastPrice || 'N/A' }}</div>
-  </div>
-  
-  <!-- Daily Variation (absolute) -->
-  <div class="col-2 text-right">
-    <div 
-      class="font-medium"
-      [class.text-green-600]="instrument?.pctDay > 0"
-      [class.text-red-600]="instrument?.pctDay < 0"
-      [class.text-600]="instrument?.pctDay === 0">
-      {{ instrument?.varDay || 'N/A' }}
-    </div>
+  <div class="col-1 text-right">
+    <div class="font-medium">{{ instrument?.lastPrice ? (instrument.lastPrice | number:'1.2-2') : '—' }}</div>
   </div>
   
   <!-- Daily Variation (percentage) -->
@@ -33,12 +22,40 @@
       [class.text-green-600]="instrument?.pctDay > 0"
       [class.text-red-600]="instrument?.pctDay < 0"
       [class.text-600]="instrument?.pctDay === 0">
-      {{ instrument?.pctDay ? (instrument.pctDay + '%') : 'N/A' }}
+      {{ instrument?.pctDay ? ((instrument.pctDay | number:'1.2-2') + '%') : '—' }}
     </div>
   </div>
   
-  <!-- Volume -->
+  <!-- 30 Days Variation (percentage) -->
   <div class="col-2 text-right">
-    <div class="text-600">{{ instrument?.volume || 'N/A' }}</div>
+    <div 
+      class="font-medium"
+      [class.text-green-600]="instrument?.pct30D > 0"
+      [class.text-red-600]="instrument?.pct30D < 0"
+      [class.text-600]="instrument?.pct30D === 0">
+      {{ instrument?.pct30D ? ((instrument.pct30D | number:'1.2-2') + '%') : '—' }}
+    </div>
+  </div>
+  
+  <!-- Year to Date Variation (percentage) -->
+  <div class="col-2 text-right">
+    <div 
+      class="font-medium"
+      [class.text-green-600]="instrument?.pctYTD > 0"
+      [class.text-red-600]="instrument?.pctYTD < 0"
+      [class.text-600]="instrument?.pctYTD === 0">
+      {{ instrument?.pctYTD ? ((instrument.pctYTD | number:'1.2-2') + '%') : '—' }}
+    </div>
+  </div>
+  
+  <!-- 12 Months Variation (percentage) -->
+  <div class="col-2 text-right">
+    <div 
+      class="font-medium"
+      [class.text-green-600]="instrument?.pct12M > 0"
+      [class.text-red-600]="instrument?.pct12M < 0"
+      [class.text-600]="instrument?.pct12M === 0">
+      {{ instrument?.pct12M ? ((instrument.pct12M | number:'1.2-2') + '%') : '—' }}
+    </div>
   </div>
 </div>
