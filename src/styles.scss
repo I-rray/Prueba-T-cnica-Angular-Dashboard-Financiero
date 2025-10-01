@@ -278,14 +278,14 @@ input::placeholder {
   color: #909090 !important;
 }
 
-/* Tab styling */
-.tab-button {
+/* Tab styling - Más específico para evitar conflictos */
+.tab-switcher .tab-button {
   background-color: transparent;
   border: 1px solid #404040;
   color: #b0b0b0;
 }
 
-.tab-button.active {
+.tab-switcher .tab-button.active {
   background-color: #3b82f6;
   color: #ffffff;
   border-color: #3b82f6;

@@ -1,11 +1,26 @@
-<div class="search-container w-full md:w-20rem">
-  <span class="p-input-icon-left w-full">
-    <i class="pi pi-search"></i>
-    <input 
-      type="text" 
-      class="p-inputtext p-component w-full"
-      placeholder="Buscar instrumentos..." 
-      (input)="onInputChange($event)"
-      #searchInput>
-  </span>
+<div class="search-container w-full md:w-20rem" 
+     [class.searching]="isSearching"
+     [class.search-loading]="isLoading">
+  <div class="search-wrapper" 
+       [class.focused]="isFocused">
+    <span class="p-input-icon-left w-full">
+      <i class="search-icon pi pi-search" 
+         [class.show-clear]="hasValue"></i>
+      <input 
+        type="text" 
+        class="p-inputtext p-component w-full"
+        placeholder="Buscar instrumentos financieros..." 
+        (input)="onInputChange($event)"
+        (focus)="onFocus()"
+        (blur)="onBlur()"
+        #searchInput>
+      <button class="clear-button" 
+              [class.show]="hasValue"
+              (click)="clearSearch()"
+              type="button"
+              aria-label="Limpiar búsqueda">
+        <i class="pi pi-times"></i>
+      </button>
+    </span>
+  </div>
 </div>

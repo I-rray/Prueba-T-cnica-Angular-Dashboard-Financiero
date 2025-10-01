@@ -68,15 +68,15 @@
 .kpi-val {
   font-size: 1rem;
   font-weight: bold;
-  
+
   &.pos {
     color: #22c55e; /* Verde */
   }
-  
+
   &.neg {
     color: #ef4444; /* Rojo */
   }
-  
+
   &.neu {
     color: #6b7280; /* Gris */
   }
@@ -123,17 +123,52 @@
     flex-direction: column;
     gap: 1rem;
   }
-  
+
   .kpis {
     gap: 1rem;
   }
-  
+
   .vol-row {
     flex-direction: column;
     gap: 1rem;
   }
-  
+
   .last-price {
     font-size: 2rem;
+  }
+}
+
+/* Dark theme styles */
+:host-context([data-theme="dark"]) {
+  .index-title {
+    color: #ffffff;
+  }
+
+  .inst-name {
+    color: #ffffff;
+  }
+
+  .last-price {
+    color: #ffffff;
+  }
+
+  .last-dt {
+    color: #ffffff;
+  }
+
+  .kpi-label {
+    color: #ffffff;
+  }
+
+  .vol-label {
+    color: #ffffff;
+  }
+
+  .vol-val {
+    color: #ffffff;
+  }
+
+  .placeholder {
+    color: #ffffff;
   }
 }

@@ -1,5 +1,5 @@
-import { Component, Input, Output, EventEmitter, computed, signal, OnInit, OnDestroy, ViewChild, ElementRef, AfterViewInit, OnChanges, SimpleChanges } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, Input, Output, EventEmitter, computed, signal, OnInit, OnDestroy, ViewChild, ElementRef, AfterViewInit, OnChanges, SimpleChanges, Inject } from '@angular/core';
+import { CommonModule, DOCUMENT } from '@angular/common';
 import { Chart, ChartConfiguration, registerables } from 'chart.js';
 
 Chart.register(...registerables);
@@ -25,6 +25,8 @@ export class ChartComponent implements OnInit, AfterViewInit, OnDestroy, OnChang
 
   // Array de periodos para el template en el orden exacto solicitado
   periods: Period[] = ['1D', '1S', '1M', '3M', '6M', '1A', '5A'];
+
+  constructor(@Inject(DOCUMENT) private document: Document) {}
 
   ngOnInit(): void {
     // Initialization logic if needed
@@ -93,6 +95,38 @@ export class ChartComponent implements OnInit, AfterViewInit, OnDestroy, OnChang
     return this.filteredPoints.length;
   }
 
+  // Detectar si estamos en modo oscuro
+  private get isDarkMode(): boolean {
+    return this.document.documentElement.getAttribute('data-theme') === 'dark';
+  }
+
+  // Obtener colores según el tema actual
+  private getThemeColors() {
+    const isDark = this.isDarkMode;
+    
+    return {
+      // Colores de línea y gradiente
+      lineColor: isDark ? '#22d3ee' : '#3b82f6',
+      gradientColors: isDark 
+        ? ['rgba(34, 211, 238, 0.9)', 'rgba(34, 211, 238, 0.7)', 'rgba(34, 211, 238, 0.4)', 'rgba(34, 211, 238, 0.1)']
+        : ['rgba(59, 130, 246, 0.9)', 'rgba(59, 130, 246, 0.7)', 'rgba(59, 130, 246, 0.4)', 'rgba(59, 130, 246, 0.1)'],
+      
+      // Colores de hover
+      hoverBackgroundColor: isDark ? '#22d3ee' : '#3b82f6',
+      hoverBorderColor: isDark ? '#ffffff' : '#ffffff',
+      
+      // Colores de tooltip
+      tooltipBackground: isDark ? 'rgba(17, 24, 39, 0.9)' : 'rgba(255, 255, 255, 0.95)',
+      tooltipTitleColor: isDark ? '#f3f4f6' : '#1f2937',
+      tooltipBodyColor: isDark ? '#d1d5db' : '#374151',
+      tooltipBorderColor: isDark ? '#374151' : '#e5e7eb',
+      
+      // Colores de grid y ticks
+      gridColor: isDark ? 'rgba(75, 85, 99, 0.3)' : 'rgba(156, 163, 175, 0.3)',
+      tickColor: isDark ? '#9ca3af' : '#6b7280'
+    };
+  }
+
   private createChart(): void {
     if (!this.chartCanvas) return;
 
@@ -107,6 +141,9 @@ export class ChartComponent implements OnInit, AfterViewInit, OnDestroy, OnChang
     const filteredData = this.filteredPoints;
     const labels = filteredData.map(p => p.t);
     const data = filteredData.map(p => p.v);
+    
+    // Obtener colores del tema actual
+    const themeColors = this.getThemeColors();
 
     const config: ChartConfiguration = {
       type: 'line',
@@ -115,14 +152,14 @@ export class ChartComponent implements OnInit, AfterViewInit, OnDestroy, OnChang
         datasets: [{
           label: 'Precio',
           data: data,
-          borderColor: '#22d3ee',
+          borderColor: themeColors.lineColor,
           backgroundColor: (context: any) => {
             const ctx = context.chart.ctx;
             const gradient = ctx.createLinearGradient(0, 0, 0, 400);
-            gradient.addColorStop(0, 'rgba(34, 211, 238, 0.9)');
-            gradient.addColorStop(0.3, 'rgba(34, 211, 238, 0.7)');
-            gradient.addColorStop(0.6, 'rgba(34, 211, 238, 0.4)');
-            gradient.addColorStop(1, 'rgba(34, 211, 238, 0.1)');
+            gradient.addColorStop(0, themeColors.gradientColors[0]);
+            gradient.addColorStop(0.3, themeColors.gradientColors[1]);
+            gradient.addColorStop(0.6, themeColors.gradientColors[2]);
+            gradient.addColorStop(1, themeColors.gradientColors[3]);
             return gradient;
           },
           borderWidth: 3,
@@ -130,8 +167,8 @@ export class ChartComponent implements OnInit, AfterViewInit, OnDestroy, OnChang
           tension: 0.3,
           pointRadius: 0,
           pointHoverRadius: 6,
-          pointHoverBackgroundColor: '#22d3ee',
-          pointHoverBorderColor: '#ffffff',
+          pointHoverBackgroundColor: themeColors.hoverBackgroundColor,
+          pointHoverBorderColor: themeColors.hoverBorderColor,
           pointHoverBorderWidth: 3
         }]
       },
@@ -147,10 +184,10 @@ export class ChartComponent implements OnInit, AfterViewInit, OnDestroy, OnChang
             display: false
           },
           tooltip: {
-            backgroundColor: 'rgba(17, 24, 39, 0.9)',
-            titleColor: '#f3f4f6',
-            bodyColor: '#d1d5db',
-            borderColor: '#374151',
+            backgroundColor: themeColors.tooltipBackground,
+            titleColor: themeColors.tooltipTitleColor,
+            bodyColor: themeColors.tooltipBodyColor,
+            borderColor: themeColors.tooltipBorderColor,
             borderWidth: 1,
             cornerRadius: 8,
             displayColors: false
@@ -161,10 +198,10 @@ export class ChartComponent implements OnInit, AfterViewInit, OnDestroy, OnChang
             display: true,
             grid: {
               display: true,
-              color: 'rgba(75, 85, 99, 0.3)'
+              color: themeColors.gridColor
             },
             ticks: {
-              color: '#9ca3af',
+              color: themeColors.tickColor,
               font: {
                 size: 11
               },
@@ -177,10 +214,10 @@ export class ChartComponent implements OnInit, AfterViewInit, OnDestroy, OnChang
             position: 'right',
             grid: {
               display: true,
-              color: 'rgba(75, 85, 99, 0.3)'
+              color: themeColors.gridColor
             },
             ticks: {
-              color: '#9ca3af',
+              color: themeColors.tickColor,
               font: {
                 size: 11
               },

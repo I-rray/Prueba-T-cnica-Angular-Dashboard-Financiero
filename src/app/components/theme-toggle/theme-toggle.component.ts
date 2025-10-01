@@ -25,28 +25,22 @@ import { ThemeService } from '../../core/services/theme.service';
           </svg>
         }
       </div>
-      
-      <span class="theme-label">
-        {{ currentTheme() === 'dark' ? 'Claro' : 'Oscuro' }}
-      </span>
     </button>
   `,
   styles: [`
     .theme-toggle-btn {
       display: flex;
       align-items: center;
-      gap: 0.5rem;
-      padding: 0.5rem 1rem;
+      justify-content: center;
+      padding: 0.75rem;
       border: 1px solid var(--border-color, #374151);
-      border-radius: 8px;
+      border-radius: 50%;
       background: var(--bg-secondary, #374151);
       color: var(--text-primary, #f3f4f6);
-      font-size: 0.875rem;
-      font-weight: 500;
       cursor: pointer;
       transition: all 0.2s ease;
-      min-width: 100px;
-      justify-content: center;
+      width: 44px;
+      height: 44px;
 
       &:hover {
         background: var(--bg-hover, #4b5563);
@@ -77,8 +71,8 @@ import { ThemeService } from '../../core/services/theme.service';
     }
 
     .icon {
-      width: 18px;
-      height: 18px;
+      width: 20px;
+      height: 20px;
       stroke-width: 2;
       transition: all 0.2s ease;
     }
@@ -89,13 +83,6 @@ import { ThemeService } from '../../core/services/theme.service';
 
     .moon-icon {
       color: #60a5fa;
-    }
-
-    .theme-label {
-      font-size: 0.8rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
     }
 
     /* Estilos para modo claro */
@@ -115,17 +102,14 @@ import { ThemeService } from '../../core/services/theme.service';
     /* Responsive */
     @media (max-width: 768px) {
       .theme-toggle-btn {
-        padding: 0.375rem 0.75rem;
-        min-width: 80px;
-      }
-
-      .theme-label {
-        font-size: 0.75rem;
+        width: 40px;
+        height: 40px;
+        padding: 0.625rem;
       }
 
       .icon {
-        width: 16px;
-        height: 16px;
+        width: 18px;
+        height: 18px;
       }
     }
   `]

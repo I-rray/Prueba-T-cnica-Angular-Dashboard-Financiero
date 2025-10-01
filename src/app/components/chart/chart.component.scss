@@ -2,17 +2,15 @@
   width: 100%;
 }
 
-/* Chart Content Area */
+/* Chart Content Area - Base Styles */
 .chart-content {
   height: 400px;
   min-height: 400px;
-  border: 1px solid #374151;
   border-radius: 12px;
   padding: 1.5rem;
-  background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3), 0 1px 3px rgba(0, 0, 0, 0.2);
   margin-bottom: 1rem;
   position: relative;
+  transition: all 0.3s ease;
 }
 
 .chart-wrapper {
@@ -34,23 +32,20 @@
   align-items: center;
   height: 100%;
   text-align: center;
-  color: #9ca3af;
 }
 
 .chart-icon {
   font-size: 4rem;
   margin-bottom: 1rem;
   opacity: 0.5;
-  color: #6b7280;
 }
 
 .no-data-text {
   font-size: 1rem;
   margin: 0;
-  color: #9ca3af;
 }
 
-/* Period Navigation Buttons */
+/* Period Navigation Buttons - Base Styles */
 .period-buttons {
   display: flex;
   justify-content: center;
@@ -61,58 +56,114 @@
 
 .period-btn {
   padding: 0.5rem 1rem;
-  border: 1px solid #4b5563;
   border-radius: 6px;
-  background-color: #374151;
-  color: #d1d5db;
   font-size: 0.875rem;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s ease;
   min-width: 50px;
-
-  &:hover {
-    background-color: #4b5563;
-    border-color: #6b7280;
-    color: #f3f4f6;
-  }
-
-  &.active {
-    background-color: #3b82f6;
-    border-color: #3b82f6;
-    color: #fff;
-    box-shadow: 0 2px 4px rgba(59, 130, 246, 0.3);
-
-    &:hover {
-      background-color: #2563eb;
-      border-color: #2563eb;
-    }
-  }
-
-  &:focus {
-    outline: none;
-    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
-  }
+  border: none;
+  outline: none;
+  box-shadow: none;
 }
 
-/* Point Counter */
+/* Point Counter - Base Styles */
 .point-counter {
   text-align: center;
   font-size: 0.875rem;
-  color: #9ca3af;
+  margin-top: 0.5rem;
+}
 
-  strong {
-    color: #f3f4f6;
-    font-weight: 600;
+/* Estilos para Modo Claro */
+:host-context([data-theme="light"]) {
+  .chart-content {
+    border: 1px solid #e5e7eb;
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+
+  .no-data-state {
+    color: #6b7280;
+  }
+
+  .chart-icon {
+    color: #9ca3af;
+  }
+
+  .no-data-text {
+    color: #6b7280;
+  }
+
+  .period-btn {
+    background-color: #f8fafc;
+    border: none;
+    color: #374151;
+
+    &:hover {
+      background-color: #f3f4f6;
+      color: #1f2937;
+    }
+
+    &.active {
+      background-color: #3b82f6;
+      color: #ffffff;
+      box-shadow: 0 2px 4px rgba(59, 130, 246, 0.3);
+    }
+  }
+
+  .point-counter {
+    color: #6b7280;
+  }
+}
+
+/* Estilos para Modo Oscuro */
+:host-context([data-theme="dark"]) {
+  .chart-content {
+    border: 1px solid #374151;
+    background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3), 0 1px 3px rgba(0, 0, 0, 0.2);
+  }
+
+  .no-data-state {
+    color: #9ca3af;
+  }
+
+  .chart-icon {
+    color: #6b7280;
+  }
+
+  .no-data-text {
+    color: #9ca3af;
+  }
+
+  .period-btn {
+    background-color: #374151;
+    border: none;
+    color: #d1d5db;
+
+    &:hover {
+      background-color: #4b5563;
+      color: #f3f4f6;
+    }
+
+    &.active {
+      background-color: #22d3ee;
+      color: #ffffff;
+      box-shadow: 0 2px 4px rgba(34, 211, 238, 0.3);
+    }
+  }
+
+  .point-counter {
+    color: #9ca3af;
   }
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
   .chart-content {
-    height: 250px;
-    min-height: 250px;
-    padding: 0.75rem;
+    height: 300px;
+    min-height: 300px;
+    padding: 1rem;
   }
 
   .period-buttons {
@@ -121,23 +172,6 @@
 
   .period-btn {
     padding: 0.375rem 0.75rem;
-    font-size: 0.8rem;
-    min-width: 45px;
-  }
-
-  .point-counter {
-    font-size: 0.8rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .chart-content {
-    height: 200px;
-    min-height: 200px;
-  }
-
-  .period-btn {
-    padding: 0.25rem 0.5rem;
     font-size: 0.75rem;
     min-width: 40px;
   }
