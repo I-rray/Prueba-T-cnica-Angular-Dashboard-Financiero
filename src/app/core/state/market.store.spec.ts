@@ -35,10 +35,10 @@ describe('MarketStore', () => {
   ];
 
   beforeEach(() => {
-    const spy = jasmine.createSpyObj('MarketService', ['getConstituents', 'getSummary', 'getHistory']);
+    const spy = jasmine.createSpyObj('MarketService', ['getConstituentsByIndex', 'getSummary', 'getHistory']);
     
     // Setup stub responses BEFORE configuring TestBed - all SYNCHRONOUS and SUCCESSFUL
-    spy.getConstituents.and.returnValue(of(mockConstituents));
+    spy.getConstituentsByIndex.and.returnValue(of({ data: { constituents: mockConstituents } }));
     spy.getSummary.and.returnValue(of(mockSummary));
     spy.getHistory.and.returnValue(of(mockHistory));
 
@@ -111,7 +111,7 @@ describe('MarketStore', () => {
 
     it('should trigger summary and history loading when instrument changes', fakeAsync(() => {
       // Reset stubs to ensure successful responses
-      marketServiceStub.getConstituents.and.returnValue(of(mockConstituents));
+      marketServiceStub.getConstituentsByIndex.and.returnValue(of({ data: { constituents: mockConstituents } }));
       marketServiceStub.getSummary.and.returnValue(of(mockSummary));
       marketServiceStub.getHistory.and.returnValue(of(mockHistory));
       
@@ -157,16 +157,16 @@ describe('MarketStore', () => {
   describe('loadConstituents method', () => {
     it('should load constituents and update signals', () => {
       // Reset stubs to ensure successful responses
-      marketServiceStub.getConstituents.and.returnValue(of(mockConstituents));
+      marketServiceStub.getConstituentsByIndex.and.returnValue(of({ data: { constituents: mockConstituents } }));
       
       store.loadConstituents();
-      expect(marketServiceStub.getConstituents).toHaveBeenCalled();
+      expect(marketServiceStub.getConstituentsByIndex).toHaveBeenCalled();
       expect(store.constituents()).toEqual(mockConstituents);
       expect(store.instruments()).toEqual(mockConstituents);
     });
 
     it('should handle error when loading constituents', () => {
-      marketServiceStub.getConstituents.and.returnValue(throwError(() => new Error('Network error')));
+      marketServiceStub.getConstituentsByIndex.and.returnValue(throwError(() => new Error('Network error')));
       
       store.loadConstituents();
       
@@ -178,7 +178,7 @@ describe('MarketStore', () => {
   describe('Signal reactivity', () => {
     it('should trigger effects when signals change', fakeAsync(() => {
       // Reset stubs to ensure successful responses
-      marketServiceStub.getConstituents.and.returnValue(of(mockConstituents));
+      marketServiceStub.getConstituentsByIndex.and.returnValue(of({ data: { constituents: mockConstituents } }));
       marketServiceStub.getSummary.and.returnValue(of(mockSummary));
       marketServiceStub.getHistory.and.returnValue(of(mockHistory));
       

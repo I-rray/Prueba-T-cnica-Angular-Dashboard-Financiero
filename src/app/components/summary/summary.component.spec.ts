@@ -7,89 +7,50 @@ describe('SummaryComponent', () => {
   let component: SummaryComponent;
   let fixture: ComponentFixture<SummaryComponent>;
 
-  const mockSummaryData = {
-    data: {
-      price: {
-        lastPrice: 25000,
-        openPrice: 24500,
-        closePrice: 24800,
-        maxDay: 25200,
-        minDay: 24300,
-        performanceRelative: 2.04,
-        min52W: 20000,
-        max52W: 28000,
-        volumeMoney: 1500000000,
-        accumulatedVolumeMoney: 45000000000
-      },
-      info: {
-        marketName: 'Bolsa de Santiago',
-        currencyName: 'CLP',
-        hourOpen: '09:30',
-        hourClose: '16:00'
-      }
-    }
+  const mockInstrument = {
+    codeInstrument: 'BCI',
+    name: 'Banco de Chile',
+    shortName: 'BCI',
+    lastPrice: 25000,
+    datetimeLastPrice: '2024-01-15 16:30:00',
+    pctDay: 2.04,
+    pct30D: 5.5,
+    pctCY: 12.3,
+    pct1Y: 18.7,
+    volumeMoney: 1500000
   };
 
+  const mockHistory = [
+    { datetimeLastPrice: '2024-01-15 16:30:00', lastPrice: 25000 },
+    { datetimeLastPrice: '2024-01-15 10:00:00', lastPrice: 24800 },
+    { datetimeLastPrice: '2024-01-14 16:00:00', lastPrice: 24500 }
+  ];
+
   const mockSummaryNegativePerformance = {
-    data: {
-      price: {
-        lastPrice: 24000,
-        openPrice: 25000,
-        closePrice: 24800,
-        maxDay: 25200,
-        minDay: 23800,
-        performanceRelative: -1.32,
-        min52W: 20000,
-        max52W: 28000,
-        volumeMoney: 800000000,
-        accumulatedVolumeMoney: 24000000000
-      },
-      info: {
-        marketName: 'Bolsa de Santiago',
-        currencyName: 'CLP',
-        hourOpen: '09:30',
-        hourClose: '16:00'
-      }
+    price: {
+      lastPrice: 24000,
+      pctDay: -1.32
     }
   };
 
   const mockSummaryZeroPerformance = {
-    data: {
-      price: {
-        lastPrice: 25000,
-        openPrice: 25000,
-        closePrice: 25000,
-        maxDay: 25100,
-        minDay: 24900,
-        performanceRelative: 0,
-        min52W: 20000,
-        max52W: 28000,
-        volumeMoney: 1000000000,
-        accumulatedVolumeMoney: 30000000000
-      },
-      info: {
-        marketName: 'Bolsa de Santiago',
-        currencyName: 'CLP',
-        hourOpen: '09:30',
-        hourClose: '16:00'
-      }
+    price: {
+      lastPrice: 25000,
+      pctDay: 0
     }
   };
 
   const mockSummaryPartialData = {
-    data: {
-      price: {
-        lastPrice: 25000,
-        openPrice: 24500,
-        closePrice: 24800
-        // Missing other price fields
-      },
-      info: {
-        marketName: 'Bolsa de Santiago',
-        currencyName: 'CLP'
-        // Missing hour fields
-      }
-    }
+    info: {
+      symbol: 'TEST',
+      name: 'Test Instrument',
+      marketName: 'Test Market'
+    },
+    price: {
+      lastPrice: 100,
+      pctDay: 1.5
+    },
+    perf: {}
   };
 
   beforeEach(async () => {
@@ -100,290 +61,203 @@ describe('SummaryComponent', () => {
 
     fixture = TestBed.createComponent(SummaryComponent);
     component = fixture.componentInstance;
+    fixture.detectChanges();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
 
-  describe('With complete summary data', () => {
+  describe('With valid instrument data', () => {
     beforeEach(() => {
-      component.summary = mockSummaryData;
+      component.instrument = mockInstrument;
+      component.history = mockHistory;
       fixture.detectChanges();
     });
 
-    it('should display summary title', () => {
-      const titleElement = fixture.debugElement.query(By.css('h3.text-xl'));
-      expect(titleElement.nativeElement.textContent.trim()).toBe('Resumen Detallado');
-    });
-
-    it('should show key price fields', () => {
-      const priceLabels = fixture.debugElement.queryAll(By.css('.text-600.font-medium'));
-      const labelTexts = priceLabels.map(label => label.nativeElement.textContent.trim());
+    it('should display instrument symbol and name', () => {
+      const symbolElement = fixture.debugElement.query(By.css('.symbol'));
+      const nameElement = fixture.debugElement.query(By.css('.name'));
       
-      expect(labelTexts).toContain('Precio Actual');
-      expect(labelTexts).toContain('Precio Apertura');
-      expect(labelTexts).toContain('Precio Cierre');
-      expect(labelTexts).toContain('Máximo del Día');
-      expect(labelTexts).toContain('Mínimo del Día');
-      expect(labelTexts).toContain('Variación Diaria');
+      expect(symbolElement.nativeElement.textContent.trim()).toBe('BCI');
+      expect(nameElement.nativeElement.textContent.trim()).toBe('Banco de Chile');
     });
 
-    it('should display current price correctly', () => {
-      const currentPriceElement = fixture.debugElement.query(By.css('.font-bold.text-900'));
-      expect(currentPriceElement.nativeElement.textContent).toContain('25,000.00');
+    it('should display last price', () => {
+      const priceElement = fixture.debugElement.query(By.css('.price-value'));
+      expect(priceElement.nativeElement.textContent).toContain('25,000.00');
     });
 
-    it('should display open price correctly', () => {
-      const priceElements = fixture.debugElement.queryAll(By.css('.font-semibold.text-700'));
-      const openPriceElement = priceElements.find(el => 
-        el.nativeElement.textContent.includes('24,500.00')
-      );
-      expect(openPriceElement).toBeTruthy();
+    it('should display price timestamp', () => {
+      const timestampElement = fixture.debugElement.query(By.css('.price-timestamp'));
+      expect(timestampElement.nativeElement.textContent.trim()).toBe('2024-01-15 16:30:00');
     });
 
-    it('should display close price correctly', () => {
-      const priceElements = fixture.debugElement.queryAll(By.css('.font-semibold.text-700'));
-      const closePriceElement = priceElements.find(el => 
-        el.nativeElement.textContent.includes('24,800.00')
-      );
-      expect(closePriceElement).toBeTruthy();
-    });
-
-    it('should show 52-week range fields', () => {
-      const rangeLabels = fixture.debugElement.queryAll(By.css('.text-600.font-medium'));
-      const labelTexts = rangeLabels.map(label => label.nativeElement.textContent.trim());
+    it('should show variation bands', () => {
+      const variationLabels = fixture.debugElement.queryAll(By.css('.variation-label'));
+      const labelTexts = variationLabels.map(label => label.nativeElement.textContent.trim());
       
-      expect(labelTexts).toContain('Mínimo 52S');
-      expect(labelTexts).toContain('Máximo 52S');
+      expect(labelTexts).toContain('Día');
+      expect(labelTexts).toContain('30D');
+      expect(labelTexts).toContain('YTD');
+      expect(labelTexts).toContain('1A');
     });
 
-    it('should display 52-week high and low correctly', () => {
-      const priceElements = fixture.debugElement.queryAll(By.css('.font-semibold.text-700'));
-      const min52WElement = priceElements.find(el => 
-        el.nativeElement.textContent.includes('20,000.00')
-      );
-      const max52WElement = priceElements.find(el => 
-        el.nativeElement.textContent.includes('28,000.00')
-      );
+    it('should show basic info in resumen tab', () => {
+      const kvRows = fixture.debugElement.queryAll(By.css('.additional-info .kv-row .k'));
+      const labelTexts = kvRows.map(label => label.nativeElement.textContent.trim());
       
-      expect(min52WElement).toBeTruthy();
-      expect(max52WElement).toBeTruthy();
+      expect(labelTexts).toContain('Sector');
+      expect(labelTexts).toContain('Moneda');
+      expect(labelTexts).toContain('País');
     });
 
-    it('should show volume information fields', () => {
-      const volumeLabels = fixture.debugElement.queryAll(By.css('.text-600.font-medium'));
-      const labelTexts = volumeLabels.map(label => label.nativeElement.textContent.trim());
-      
-      expect(labelTexts).toContain('Volumen Diario');
-      expect(labelTexts).toContain('Volumen Acumulado');
+    it('should switch to detalles tab', () => {
+      const detallesButton = fixture.debugElement.query(By.css('.tab-button:nth-child(2)'));
+      detallesButton.nativeElement.click();
+      fixture.detectChanges();
+
+      const detailsTable = fixture.debugElement.query(By.css('.details-table'));
+      expect(detailsTable).toBeTruthy();
     });
 
-    it('should show market information fields', () => {
-      const marketLabels = fixture.debugElement.queryAll(By.css('.text-600.font-medium'));
-      const labelTexts = marketLabels.map(label => label.nativeElement.textContent.trim());
+    it('should show market info in detalles tab', () => {
+      component.setActiveTab('detalles');
+      fixture.detectChanges();
+
+      const kvRows = fixture.debugElement.queryAll(By.css('.details-table .kv-row .k'));
+      const labelTexts = kvRows.map(label => label.nativeElement.textContent.trim());
       
       expect(labelTexts).toContain('Mercado');
-      expect(labelTexts).toContain('Moneda');
-      expect(labelTexts).toContain('Horario');
-    });
-
-    it('should display market name correctly', () => {
-      const marketElements = fixture.debugElement.queryAll(By.css('.font-semibold.text-700'));
-      const marketNameElement = marketElements.find(el => 
-        el.nativeElement.textContent.includes('Bolsa de Santiago')
-      );
-      expect(marketNameElement).toBeTruthy();
-    });
-
-    it('should display currency correctly', () => {
-      const currencyElements = fixture.debugElement.queryAll(By.css('.font-semibold.text-700'));
-      const currencyElement = currencyElements.find(el => 
-        el.nativeElement.textContent.includes('CLP')
-      );
-      expect(currencyElement).toBeTruthy();
-    });
-
-    it('should display trading hours correctly', () => {
-      const hourElements = fixture.debugElement.queryAll(By.css('.font-semibold.text-700'));
-      const hourElement = hourElements.find(el => 
-        el.nativeElement.textContent.includes('09:30 - 16:00')
-      );
-      expect(hourElement).toBeTruthy();
-    });
-
-    it('should not show no-summary template when data exists', () => {
-      const noSummaryElement = fixture.debugElement.query(By.css('.no-summary'));
-      expect(noSummaryElement).toBeFalsy();
+      expect(labelTexts).toContain('Apertura');
+      expect(labelTexts).toContain('Cierre anterior');
     });
   });
 
   describe('Performance color coding', () => {
-    it('should apply green color for positive performance', () => {
-      component.summary = mockSummaryData;
+    it('should apply positive color class for positive performance', () => {
+      component.instrument = { ...mockInstrument, pctDay: 2.5 };
       fixture.detectChanges();
-      
-      const performanceElement = fixture.debugElement.query(By.css('.text-green-600'));
-      expect(performanceElement).toBeTruthy();
-      expect(performanceElement.nativeElement.textContent).toContain('+2.04%');
+
+      const positiveElements = fixture.debugElement.queryAll(By.css('.pos'));
+      expect(positiveElements.length).toBeGreaterThan(0);
     });
 
-    it('should apply red color for negative performance', () => {
-      component.summary = mockSummaryNegativePerformance;
+    it('should apply negative color class for negative performance', () => {
+      component.instrument = { ...mockInstrument, pctDay: -1.5 };
       fixture.detectChanges();
-      
-      const performanceElement = fixture.debugElement.query(By.css('.text-red-600'));
-      expect(performanceElement).toBeTruthy();
-      expect(performanceElement.nativeElement.textContent).toContain('-1.32%');
+
+      const negativeElements = fixture.debugElement.queryAll(By.css('.neg'));
+      expect(negativeElements.length).toBeGreaterThan(0);
     });
 
-    it('should apply neutral color for zero performance', () => {
-      component.summary = mockSummaryZeroPerformance;
+    it('should apply neutral color class for zero performance', () => {
+      component.instrument = { ...mockInstrument, pctDay: 0 };
       fixture.detectChanges();
-      
-      // Find the performance element by looking for the span with performance data
-      const performanceElements = fixture.debugElement.queryAll(By.css('span'));
-      const performanceElement = performanceElements.find(el => 
-        el.nativeElement.textContent.includes('0.00%')
-      );
-      
-      expect(performanceElement).toBeTruthy();
-      if (performanceElement) {
-        expect(performanceElement.nativeElement.textContent).toContain('0.00%');
-        expect(performanceElement.nativeElement.textContent).not.toContain('+');
-        expect(performanceElement.nativeElement.classList).toContain('text-600');
-      }
-    });
 
-    it('should show plus sign for positive performance', () => {
-      component.summary = mockSummaryData;
-      fixture.detectChanges();
-      
-      const performanceElement = fixture.debugElement.query(By.css('.text-green-600'));
-      expect(performanceElement.nativeElement.textContent).toContain('+');
-    });
-
-    it('should not show plus sign for negative performance', () => {
-      component.summary = mockSummaryNegativePerformance;
-      fixture.detectChanges();
-      
-      const performanceElement = fixture.debugElement.query(By.css('.text-red-600'));
-      expect(performanceElement.nativeElement.textContent).not.toContain('+');
+      const neutralElements = fixture.debugElement.queryAll(By.css('.neu'));
+      expect(neutralElements.length).toBeGreaterThan(0);
     });
   });
 
-  describe('Null summary state', () => {
+  describe('Null instrument state', () => {
     beforeEach(() => {
-      component.summary = null;
+      component.instrument = null;
       fixture.detectChanges();
     });
 
-    it('should show no-summary template when summary is null', () => {
+    it('should show no summary template', () => {
       const noSummaryElement = fixture.debugElement.query(By.css('.no-summary'));
       expect(noSummaryElement).toBeTruthy();
     });
 
-    it('should display placeholder message', () => {
-      const titleElement = fixture.debugElement.query(By.css('h3.text-xl.text-500'));
-      const descriptionElement = fixture.debugElement.query(By.css('p.text-sm.text-400'));
-      
-      expect(titleElement.nativeElement.textContent.trim()).toBe('No hay datos de resumen');
-      expect(descriptionElement.nativeElement.textContent.trim()).toBe('Selecciona un instrumento para ver su información detallada');
+    it('should display no data message', () => {
+      const titleElement = fixture.debugElement.query(By.css('.no-summary-title'));
+      expect(titleElement.nativeElement.textContent).toContain('No hay datos de resumen');
     });
 
     it('should show info icon in placeholder', () => {
-      const iconElement = fixture.debugElement.query(By.css('i.pi-info-circle'));
+      const iconElement = fixture.debugElement.query(By.css('.no-summary-icon'));
       expect(iconElement).toBeTruthy();
     });
-
-    it('should not show summary content when null', () => {
-      const summaryContentElement = fixture.debugElement.query(By.css('.summary-content'));
-      expect(summaryContentElement).toBeFalsy();
-    });
   });
 
-  describe('Undefined summary state', () => {
+  describe('Undefined instrument state', () => {
     beforeEach(() => {
-      component.summary = undefined;
+      component.instrument = undefined;
       fixture.detectChanges();
     });
 
-    it('should show no-summary template when summary is undefined', () => {
+    it('should show no summary template', () => {
       const noSummaryElement = fixture.debugElement.query(By.css('.no-summary'));
       expect(noSummaryElement).toBeTruthy();
     });
   });
 
-  describe('Empty summary data state', () => {
+  describe('Empty instrument data state', () => {
     beforeEach(() => {
-      component.summary = { data: null };
+      component.instrument = {};
       fixture.detectChanges();
     });
 
-    it('should show no-summary template when summary.data is null', () => {
-      const noSummaryElement = fixture.debugElement.query(By.css('.no-summary'));
-      expect(noSummaryElement).toBeTruthy();
+    it('should handle empty data gracefully', () => {
+      expect(component).toBeTruthy();
+      // Component should not crash with empty data
     });
   });
 
-  describe('Partial data handling', () => {
+  describe('Tab functionality', () => {
     beforeEach(() => {
-      component.summary = mockSummaryPartialData;
+      component.instrument = mockInstrument;
       fixture.detectChanges();
     });
 
-    it('should show available price fields', () => {
-      const priceLabels = fixture.debugElement.queryAll(By.css('.text-600.font-medium'));
-      const labelTexts = priceLabels.map(label => label.nativeElement.textContent.trim());
+    it('should display tab buttons', () => {
+      const tabButtons = fixture.debugElement.queryAll(By.css('.tab-button'));
+      const buttonTexts = tabButtons.map(button => button.nativeElement.textContent.trim());
       
-      expect(labelTexts).toContain('Precio Actual');
-      expect(labelTexts).toContain('Precio Apertura');
-      expect(labelTexts).toContain('Precio Cierre');
+      expect(buttonTexts).toContain('Resumen');
+      expect(buttonTexts).toContain('Detalles');
     });
 
-    it('should not show 52-week range when data is missing', () => {
-      const rangeLabels = fixture.debugElement.queryAll(By.css('.text-600.font-medium'));
-      const labelTexts = rangeLabels.map(label => label.nativeElement.textContent.trim());
-      
-      expect(labelTexts).not.toContain('Mínimo 52S');
-      expect(labelTexts).not.toContain('Máximo 52S');
+    it('should have resumen tab active by default', () => {
+      const activeTab = fixture.debugElement.query(By.css('.tab-button.active'));
+      expect(activeTab.nativeElement.textContent.trim()).toBe('Resumen');
     });
 
-    it('should not show volume information when data is missing', () => {
-      const volumeLabels = fixture.debugElement.queryAll(By.css('.text-600.font-medium'));
-      const labelTexts = volumeLabels.map(label => label.nativeElement.textContent.trim());
-      
-      expect(labelTexts).not.toContain('Volumen Diario');
-      expect(labelTexts).not.toContain('Volumen Acumulado');
-    });
-
-    it('should show available market info fields', () => {
-      component.summary = mockSummaryPartialData;
+    it('should switch to detalles tab when clicked', () => {
+      const detallesButton = fixture.debugElement.query(By.css('.tab-button:nth-child(2)'));
+      detallesButton.nativeElement.click();
       fixture.detectChanges();
-      
-      const marketLabels = fixture.debugElement.queryAll(By.css('.text-600.font-medium'));
-      const labelTexts = marketLabels.map(label => label.nativeElement.textContent.trim());
-      
-      expect(labelTexts).toContain('Mercado');
-      expect(labelTexts).toContain('Moneda');
-      expect(labelTexts).not.toContain('Horario'); // Missing hour fields
+
+      const activeTab = fixture.debugElement.query(By.css('.tab-button.active'));
+      expect(activeTab.nativeElement.textContent.trim()).toBe('Detalles');
     });
   });
 
-  describe('Section headers', () => {
-    beforeEach(() => {
-      component.summary = mockSummaryData;
-      fixture.detectChanges();
+  describe('Formatting methods', () => {
+    it('should format numbers correctly', () => {
+      expect(component.fmt2(25000)).toBe('25,000.00');
+      expect(component.fmt2(undefined)).toBe('—');
     });
 
-    it('should display all section headers', () => {
-      const sectionHeaders = fixture.debugElement.queryAll(By.css('h4.text-lg.font-medium'));
-      const headerTexts = sectionHeaders.map(header => header.nativeElement.textContent.trim());
-      
-      expect(headerTexts).toContain('Información de Precios');
-      expect(headerTexts).toContain('Rango 52 Semanas');
-      expect(headerTexts).toContain('Información de Volumen');
-      expect(headerTexts).toContain('Información del Mercado');
+    it('should format integers correctly', () => {
+      expect(component.fmtInt(1500000)).toBe('1,500,000');
+      expect(component.fmtInt(undefined)).toBe('—');
+    });
+
+    it('should format percentages correctly', () => {
+      expect(component.fmtPct(2.5)).toBe('+2.50%');
+      expect(component.fmtPct(-1.5)).toBe('-1.50%');
+      expect(component.fmtPct(0)).toBe('0.00%');
+      expect(component.fmtPct(undefined)).toBe('—');
+    });
+
+    it('should return correct CSS classes for performance', () => {
+      expect(component.pctClass(2.5)).toBe('pos');
+      expect(component.pctClass(-1.5)).toBe('neg');
+      expect(component.pctClass(0)).toBe('neu');
+      expect(component.pctClass(undefined)).toBe('neu');
     });
   });
 });
