@@ -4,10 +4,25 @@
   padding: 1rem 0;
   position: relative;
   
+  // Subtle background animation
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -50%;
+    width: 200%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.05), transparent);
+    animation: shimmer 3s infinite;
+    pointer-events: none;
+  }
+  
   .header-title-container {
     display: flex;
     align-items: center;
     gap: 1rem;
+    position: relative;
+    z-index: 1;
     
     .logo-container {
       position: relative;
@@ -15,15 +30,32 @@
       align-items: center;
       justify-content: center;
       
+      // Pulse animation for logo container
+      &::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 60px;
+        height: 60px;
+        background: radial-gradient(circle, rgba(59, 130, 246, 0.1) 0%, transparent 70%);
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        animation: logoPulse 4s ease-in-out infinite;
+        pointer-events: none;
+      }
+      
       .dashboard-logo {
         width: 48px;
         height: 48px;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
+        animation: logoFloat 6s ease-in-out infinite;
         
         &:hover {
           transform: scale(1.05) rotate(5deg);
           filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.2));
+          animation-play-state: paused;
         }
       }
     }
@@ -44,10 +76,12 @@
         background-clip: text;
         text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         transition: all 0.3s ease;
+        animation: titleGlow 8s ease-in-out infinite;
         
         &:hover {
           transform: translateY(-1px);
           text-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+          animation-play-state: paused;
         }
       }
       
@@ -58,13 +92,49 @@
         margin: 0;
         opacity: 0.8;
         transition: opacity 0.3s ease;
+        animation: subtitleFade 10s ease-in-out infinite;
         
         &:hover {
           opacity: 1;
+          animation-play-state: paused;
         }
       }
     }
   }
+}
+
+// Keyframe animations
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+@keyframes logoPulse {
+  0%, 100% { 
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.3;
+  }
+  50% { 
+    transform: translate(-50%, -50%) scale(1.2);
+    opacity: 0.1;
+  }
+}
+
+@keyframes logoFloat {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  25% { transform: translateY(-2px) rotate(1deg); }
+  50% { transform: translateY(-1px) rotate(0deg); }
+  75% { transform: translateY(-3px) rotate(-1deg); }
+}
+
+@keyframes titleGlow {
+  0%, 100% { filter: brightness(1); }
+  50% { filter: brightness(1.1); }
+}
+
+@keyframes subtitleFade {
+  0%, 100% { opacity: 0.8; }
+  50% { opacity: 0.6; }
 }
 
 // Dark theme styles
