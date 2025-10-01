@@ -3,50 +3,234 @@
 @import "primeflex/primeflex.css";
 @import "primeicons/primeicons.css";
 
-/* Global dark theme styles */
-body {
-  background-color: #1a1a1a;
-  color: #ffffff;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+/* CSS Variables for Dynamic Theming */
+:root {
+  /* Light Theme Variables */
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8fafc;
+  --bg-tertiary: #f1f5f9;
+  --bg-card: rgba(255, 255, 255, 0.95);
+  --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  
+  --text-primary: #1e293b;
+  --text-secondary: #64748b;
+  --text-tertiary: #94a3b8;
+  --text-inverse: #ffffff;
+  
+  --border-primary: rgba(59, 130, 246, 0.2);
+  --border-secondary: rgba(226, 232, 240, 0.5);
+  --border-tertiary: #e2e8f0;
+  
+  --accent-primary: #3b82f6;
+  --accent-secondary: #06b6d4;
+  --accent-hover: #2563eb;
+  
+  --shadow-sm: 0 4px 16px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.15);
+  --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.2);
+  
+  --blur-backdrop: blur(10px);
+  --transition-base: all 0.3s ease;
 }
 
-/* Dark theme overrides */
+/* Dark Theme Variables */
+[data-theme="dark"] {
+  --bg-primary: #0f172a;
+  --bg-secondary: #1e293b;
+  --bg-tertiary: #334155;
+  --bg-card: rgba(15, 23, 42, 0.9);
+  --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+  
+  --text-primary: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --text-tertiary: #64748b;
+  --text-inverse: #0f172a;
+  
+  --border-primary: rgba(34, 211, 238, 0.2);
+  --border-secondary: rgba(71, 85, 105, 0.3);
+  --border-tertiary: #475569;
+  
+  --accent-primary: #22d3ee;
+  --accent-secondary: #06b6d4;
+  --accent-hover: #0891b2;
+  
+  --shadow-sm: 0 8px 32px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 12px 40px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.5);
+  
+  --blur-backdrop: blur(10px);
+  --transition-base: all 0.3s ease;
+}
+
+/* Global Styles with CSS Variables */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: var(--bg-gradient);
+  color: var(--text-primary);
+  transition: var(--transition-base);
+  min-height: 100vh;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Enhanced scrollbar for both themes */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-secondary);
+  border-radius: 4px;
+  transition: var(--transition-base);
+  
+  &:hover {
+    background: var(--accent-primary);
+  }
+}
+
+/* PrimeFlex overrides with CSS variables */
 .surface-ground {
-  background-color: #1a1a1a !important;
+  background-color: var(--bg-primary) !important;
+  transition: var(--transition-base);
 }
 
 .surface-card {
-  background-color: #2a2a2a !important;
-  border: 1px solid #404040 !important;
+  background-color: var(--bg-card) !important;
+  border: 1px solid var(--border-primary) !important;
+  backdrop-filter: var(--blur-backdrop);
+  transition: var(--transition-base);
 }
 
 .text-900 {
-  color: #ffffff !important;
+  color: var(--text-primary) !important;
 }
 
 .text-700 {
-  color: #e0e0e0 !important;
+  color: var(--text-secondary) !important;
 }
 
 .text-600 {
-  color: #b0b0b0 !important;
+  color: var(--text-secondary) !important;
 }
 
 .text-500 {
-  color: #909090 !important;
+  color: var(--text-tertiary) !important;
 }
 
 .text-400 {
-  color: #707070 !important;
+  color: var(--text-tertiary) !important;
 }
 
 .text-300 {
-  color: #505050 !important;
+  color: var(--text-tertiary) !important;
 }
 
-/* Border colors for dark theme */
+/* Border colors with CSS variables */
 .border-100 {
-  border-color: #404040 !important;
+  border-color: var(--border-secondary) !important;
+}
+
+.border-200 {
+  border-color: var(--border-primary) !important;
+}
+
+/* Utility classes for modern design */
+.glass-effect {
+  background: var(--bg-card);
+  backdrop-filter: var(--blur-backdrop);
+  border: 1px solid var(--border-primary);
+  border-radius: 12px;
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition-base);
+  
+  &:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+  }
+}
+
+.modern-card {
+  @extend .glass-effect;
+  padding: 1.5rem;
+  
+  &.interactive:hover {
+    border-color: var(--accent-primary);
+    box-shadow: var(--shadow-lg);
+  }
+}
+
+.accent-text {
+  color: var(--accent-primary);
+  font-weight: 600;
+}
+
+.gradient-text {
+  background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: 700;
+}
+
+/* Animation utilities */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.animate-slide-in-right {
+  animation: slideInRight 0.4s ease-out;
+}
+
+/* Focus styles for accessibility */
+*:focus {
+  outline: 2px solid var(--accent-primary);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Selection styles */
+::selection {
+  background-color: var(--accent-primary);
+  color: var(--text-inverse);
 }
 
 .surface-border {

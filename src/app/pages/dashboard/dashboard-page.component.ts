@@ -5,7 +5,9 @@ import { TabSwitcherComponent } from '../../components/tab-switcher/tab-switcher
 import { ChartComponent } from '../../components/chart/chart.component';
 import { SummaryComponent } from '../../components/summary/summary.component';
 import { InstrumentListComponent } from '../../components/instrument-list/instrument-list.component';
+import { ThemeToggleComponent } from '../../components/theme-toggle/theme-toggle.component';
 import { MarketStore } from '../../core/state/market.store';
+import { ThemeService } from '../../core/services/theme.service';
 
 type Period = '1D' | '1S' | '1M' | '3M' | '6M' | '1A' | '5A';
 
@@ -17,7 +19,8 @@ type Period = '1D' | '1S' | '1M' | '3M' | '6M' | '1A' | '5A';
     TabSwitcherComponent,
     ChartComponent,
     SummaryComponent,
-    InstrumentListComponent
+    InstrumentListComponent,
+    ThemeToggleComponent
   ],
   templateUrl: './dashboard-page.component.html',
   styleUrl: './dashboard-page.component.scss'
@@ -103,7 +106,7 @@ export class DashboardPageComponent {
   // Índices estáticos según requerimientos
   public indices = ['IPSA', 'IGPA', 'NASDAQ', 'DOW JONES', 'SP/BVL'];
 
-  constructor(public marketStore: MarketStore) {}
+  constructor(public marketStore: MarketStore, public themeService: ThemeService) {}
 
   // Handlers para eventos de componentes
   onQueryChange(newQuery: string): void {

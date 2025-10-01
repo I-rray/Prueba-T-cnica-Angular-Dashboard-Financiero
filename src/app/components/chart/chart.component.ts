@@ -115,22 +115,82 @@ export class ChartComponent implements OnInit, AfterViewInit, OnDestroy, OnChang
         datasets: [{
           label: 'Precio',
           data: data,
-          borderColor: 'rgb(75, 192, 192)',
-          backgroundColor: 'rgba(75, 192, 192, 0.2)',
-          tension: 0.1
+          borderColor: '#22d3ee',
+          backgroundColor: (context: any) => {
+            const ctx = context.chart.ctx;
+            const gradient = ctx.createLinearGradient(0, 0, 0, 400);
+            gradient.addColorStop(0, 'rgba(34, 211, 238, 0.9)');
+            gradient.addColorStop(0.3, 'rgba(34, 211, 238, 0.7)');
+            gradient.addColorStop(0.6, 'rgba(34, 211, 238, 0.4)');
+            gradient.addColorStop(1, 'rgba(34, 211, 238, 0.1)');
+            return gradient;
+          },
+          borderWidth: 3,
+          fill: 'origin',
+          tension: 0.3,
+          pointRadius: 0,
+          pointHoverRadius: 6,
+          pointHoverBackgroundColor: '#22d3ee',
+          pointHoverBorderColor: '#ffffff',
+          pointHoverBorderWidth: 3
         }]
       },
       options: {
         responsive: true,
         maintainAspectRatio: false,
+        interaction: {
+          intersect: false,
+          mode: 'index'
+        },
         plugins: {
           legend: {
             display: false
+          },
+          tooltip: {
+            backgroundColor: 'rgba(17, 24, 39, 0.9)',
+            titleColor: '#f3f4f6',
+            bodyColor: '#d1d5db',
+            borderColor: '#374151',
+            borderWidth: 1,
+            cornerRadius: 8,
+            displayColors: false
           }
         },
         scales: {
+          x: {
+            display: true,
+            grid: {
+              display: true,
+              color: 'rgba(75, 85, 99, 0.3)'
+            },
+            ticks: {
+              color: '#9ca3af',
+              font: {
+                size: 11
+              },
+              maxTicksLimit: 8
+            }
+          },
           y: {
-            beginAtZero: false
+            display: true,
+            beginAtZero: false,
+            position: 'right',
+            grid: {
+              display: true,
+              color: 'rgba(75, 85, 99, 0.3)'
+            },
+            ticks: {
+              color: '#9ca3af',
+              font: {
+                size: 11
+              },
+              callback: function(value: any) {
+                return new Intl.NumberFormat('es-CL', {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2
+                }).format(value);
+              }
+            }
           }
         }
       }
