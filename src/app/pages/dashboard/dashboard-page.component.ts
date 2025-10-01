@@ -74,6 +74,32 @@ export class DashboardPageComponent {
     }));
   });
 
+  // Computed property para el SummaryComponent - devuelve array plano de datos históricos
+  historyArray = computed(() => {
+    const historyResponse = this.marketStore.history();
+    
+    // Verificar si historyResponse es un objeto con data.chart o un array directo
+    let historyArray: any[] = [];
+    
+    if (historyResponse && typeof historyResponse === 'object') {
+      if (Array.isArray(historyResponse)) {
+        // Es un array directo
+        historyArray = historyResponse;
+      } else if ((historyResponse as any).data && (historyResponse as any).data.chart) {
+        // Es un objeto con data.chart
+        historyArray = (historyResponse as any).data.chart;
+      }
+    }
+    
+    if (!Array.isArray(historyArray) || historyArray.length === 0) return [];
+    
+    // Para el SummaryComponent, devolver el array con el formato esperado
+    return historyArray.map((item: any) => ({
+      datetimeLastPrice: item.datetimeLastPrice,
+      lastPrice: item.lastPrice
+    }));
+  });
+
   // Índices estáticos según requerimientos
   public indices = ['IPSA', 'IGPA', 'NASDAQ', 'DOW JONES', 'SP/BVL'];
 

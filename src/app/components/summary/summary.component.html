@@ -1,160 +1,159 @@
 <div class="summary-container">
-  <div *ngIf="summary && summary.data; else noSummary" class="summary-content">
+  <div *ngIf="vm; else noSummary" class="summary-content">
     
-    <!-- Tabs de navegación -->
-    <div class="mb-4">
-      <div class="flex gap-2">
-        <button 
-          class="px-3 py-2 border-round text-sm font-medium cursor-pointer border-none"
-          [ngClass]="{
-            'bg-primary text-white': activeTab === 'resumen',
-            'bg-gray-100 text-gray-700 hover:bg-gray-200': activeTab !== 'resumen'
-          }"
-          (click)="setActiveTab('resumen')">
-          Resumen
-        </button>
-        <button 
-          class="px-3 py-2 border-round text-sm font-medium cursor-pointer border-none"
-          [ngClass]="{
-            'bg-primary text-white': activeTab === 'detalles',
-            'bg-gray-100 text-gray-700 hover:bg-gray-200': activeTab !== 'detalles'
-          }"
-          (click)="setActiveTab('detalles')">
-          Detalles
-        </button>
-      </div>
+    <!-- Pestañas de navegación -->
+    <div class="tabs">
+      <button 
+        class="tab-button"
+        [class.active]="activeTab === 'resumen'"
+        (click)="setActiveTab('resumen')">
+        Resumen
+      </button>
+      <button 
+        class="tab-button"
+        [class.active]="activeTab === 'detalles'"
+        (click)="setActiveTab('detalles')">
+        Detalles
+      </button>
     </div>
 
-    <!-- Contenido del tab Resumen -->
-    <div *ngIf="activeTab === 'resumen'">
-      <!-- Encabezado: Símbolo y Nombre -->
-      <div class="mb-4">
-        <h2 class="text-2xl font-bold text-900 m-0">{{ summary.data.info?.symbol || '—' }}</h2>
-        <p class="text-lg text-700 mt-1 mb-0">{{ summary.data.info?.name || summary.data.info?.shortName || '—' }}</p>
-      </div>
-
-      <!-- Precio Grande + Timestamp -->
-      <div class="mb-4">
-        <div class="text-4xl font-bold text-900 mb-2">
-          ${{ summary.data.price?.lastPrice ? (summary.data.price.lastPrice | number:'1.2-2') : '—' }}
+    <!-- Contenido de las pestañas -->
+    <div class="tab-content">
+      
+      <!-- Pestaña Resumen -->
+      <div *ngIf="activeTab === 'resumen'">
+        <!-- Encabezado: Símbolo y Nombre -->
+        <div class="header-section">
+          <h2 class="symbol">{{ vm.info.symbol }}</h2>
+          <p class="name">{{ vm.info.name }}</p>
         </div>
-        <div class="text-sm text-500">
-          {{ summary.data.price?.datetimeLastPrice || '—' }}
-        </div>
-      </div>
 
-      <!-- Línea de Variaciones: Día, 30D, YTD, 1A -->
-      <div class="mb-4 pb-3 border-bottom-1 surface-border">
-        <div class="grid">
-          <div class="col-3">
-            <div class="text-center">
-              <div class="text-xs text-600 mb-1">Día</div>
-              <div class="font-semibold"
-                   [ngClass]="{
-                     'text-green-600': summary.data.price?.performanceRelative > 0,
-                     'text-red-600': summary.data.price?.performanceRelative < 0,
-                     'text-600': summary.data.price?.performanceRelative === 0
-                   }">
-                {{ summary.data.price?.performanceRelative ? 
-                   ((summary.data.price.performanceRelative > 0 ? '+' : '') + (summary.data.price.performanceRelative | number:'1.2-2') + '%') : '—' }}
-              </div>
+        <!-- Precio Grande + Timestamp -->
+        <div class="price-section">
+          <div class="price-value">
+            ${{ fmt2(vm.price.lastPrice) }}
+          </div>
+          <div class="price-timestamp">
+            {{ vm.price.datetimeLastPrice || '—' }}
+          </div>
+        </div>
+
+        <!-- Banda de Variaciones: Día, 30D, YTD, 1A -->
+        <div class="variations-band">
+          <div class="variation-item">
+            <div class="variation-label">Día</div>
+            <div class="variation-value" [class]="pctClass(vm.price.pctDay)">
+              {{ fmtPct(vm.price.pctDay) }}
             </div>
           </div>
-          <div class="col-3">
-            <div class="text-center">
-              <div class="text-xs text-600 mb-1">30D</div>
-              <div class="font-semibold"
-                   [ngClass]="{
-                     'text-green-600': summary.data.price?.pct30D > 0,
-                     'text-red-600': summary.data.price?.pct30D < 0,
-                     'text-600': summary.data.price?.pct30D === 0
-                   }">
-                {{ summary.data.price?.pct30D ? 
-                   ((summary.data.price.pct30D > 0 ? '+' : '') + (summary.data.price.pct30D | number:'1.2-2') + '%') : '—' }}
-              </div>
+          <div class="variation-item">
+            <div class="variation-label">30D</div>
+            <div class="variation-value" [class]="pctClass(vm.price.pct30D)">
+              {{ fmtPct(vm.price.pct30D) }}
             </div>
           </div>
-          <div class="col-3">
-            <div class="text-center">
-              <div class="text-xs text-600 mb-1">YTD</div>
-              <div class="font-semibold"
-                   [ngClass]="{
-                     'text-green-600': summary.data.price?.pctCY > 0,
-                     'text-red-600': summary.data.price?.pctCY < 0,
-                     'text-600': summary.data.price?.pctCY === 0
-                   }">
-                {{ summary.data.price?.pctCY ? 
-                   ((summary.data.price.pctCY > 0 ? '+' : '') + (summary.data.price.pctCY | number:'1.2-2') + '%') : '—' }}
-              </div>
+          <div class="variation-item">
+            <div class="variation-label">YTD</div>
+            <div class="variation-value" [class]="pctClass(vm.price.pctCY)">
+              {{ fmtPct(vm.price.pctCY) }}
             </div>
           </div>
-          <div class="col-3">
-            <div class="text-center">
-              <div class="text-xs text-600 mb-1">1A</div>
-              <div class="font-semibold"
-                   [ngClass]="{
-                     'text-green-600': summary.data.price?.pct1Y > 0,
-                     'text-red-600': summary.data.price?.pct1Y < 0,
-                     'text-600': summary.data.price?.pct1Y === 0
-                   }">
-                {{ summary.data.price?.pct1Y ? 
-                   ((summary.data.price.pct1Y > 0 ? '+' : '') + (summary.data.price.pct1Y | number:'1.2-2') + '%') : '—' }}
-              </div>
+          <div class="variation-item">
+            <div class="variation-label">1A</div>
+            <div class="variation-value" [class]="pctClass(vm.price.pct1Y)">
+              {{ fmtPct(vm.price.pct1Y) }}
             </div>
+          </div>
+        </div>
+
+        <!-- Información adicional -->
+        <div class="additional-info">
+          <div class="kv-row">
+            <span class="k">Sector</span>
+            <span class="v">Financiero</span>
+          </div>
+          <div class="kv-row">
+            <span class="k">Moneda</span>
+            <span class="v">CLP</span>
+          </div>
+          <div class="kv-row">
+            <span class="k">País</span>
+            <span class="v">Chile</span>
           </div>
         </div>
       </div>
-    </div>
 
-    <!-- Contenido del tab Detalles -->
-    <div *ngIf="activeTab === 'detalles'">
-      <h4 class="text-lg font-medium text-700 mb-3">Información Detallada</h4>
-      <div class="grid">
-        <!-- Primera columna -->
-        <div class="col-12 md:col-6">
-          <div class="flex justify-content-between align-items-center py-2 border-bottom-1 surface-border">
-            <span class="text-600 font-medium">Mercado</span>
-            <span class="font-semibold text-700">{{ summary.data.info?.marketName || '—' }}</span>
+      <!-- Pestaña Detalles -->
+      <div *ngIf="activeTab === 'detalles'">
+        <div class="details-table">
+          <!-- Título Cotización + Timestamp -->
+          <div class="kv-row">
+            <span class="k">Cotización</span>
+            <span class="v">{{ vm.price.datetimeLastPrice || '—' }}</span>
           </div>
-          <div class="flex justify-content-between align-items-center py-2 border-bottom-1 surface-border">
-            <span class="text-600 font-medium">Apertura</span>
-            <span class="font-semibold text-700">${{ summary.data.price?.openPrice ? (summary.data.price.openPrice | number:'1.2-2') : '—' }}</span>
+          
+          <!-- Filas de datos en orden estricto -->
+          <div class="kv-row">
+            <span class="k">Mercado</span>
+            <span class="v">{{ vm.info.marketName }}</span>
           </div>
-          <div class="flex justify-content-between align-items-center py-2 border-bottom-1 surface-border">
-            <span class="text-600 font-medium">Cierre anterior</span>
-            <span class="font-semibold text-700">${{ summary.data.price?.closePrice ? (summary.data.price.closePrice | number:'1.2-2') : '—' }}</span>
+          
+          <div class="kv-row">
+            <span class="k">Apertura</span>
+            <span class="v">${{ fmt2(vm.price.openPrice) }}</span>
           </div>
-          <div class="flex justify-content-between align-items-center py-2 border-bottom-1 surface-border">
-            <span class="text-600 font-medium">Máximo día</span>
-            <span class="font-semibold text-700">${{ summary.data.price?.maxDay ? (summary.data.price.maxDay | number:'1.2-2') : '—' }}</span>
+          
+          <div class="kv-row">
+            <span class="k">Cierre anterior</span>
+            <span class="v">${{ fmt2(vm.price.closePrev) }}</span>
           </div>
-          <div class="flex justify-content-between align-items-center py-2 border-bottom-1 surface-border">
-            <span class="text-600 font-medium">Mínimo día</span>
-            <span class="font-semibold text-700">${{ summary.data.price?.minDay ? (summary.data.price.minDay | number:'1.2-2') : '—' }}</span>
+          
+          <div class="kv-row">
+            <span class="k">Máximo diario</span>
+            <span class="v">${{ fmt2(vm.price.maxDay) }}</span>
           </div>
-        </div>
-        
-        <!-- Segunda columna -->
-        <div class="col-12 md:col-6">
-          <div class="flex justify-content-between align-items-center py-2 border-bottom-1 surface-border">
-            <span class="text-600 font-medium">Máximo 52S</span>
-            <span class="font-semibold text-700">${{ summary.data.price?.max52W ? (summary.data.price.max52W | number:'1.2-2') : '—' }}</span>
+          
+          <div class="kv-row">
+            <span class="k">Mínimo diario</span>
+            <span class="v">${{ fmt2(vm.price.minDay) }}</span>
           </div>
-          <div class="flex justify-content-between align-items-center py-2 border-bottom-1 surface-border">
-            <span class="text-600 font-medium">Mínimo 52S</span>
-            <span class="font-semibold text-700">${{ summary.data.price?.min52W ? (summary.data.price.min52W | number:'1.2-2') : '—' }}</span>
+          
+          <div class="kv-row">
+            <span class="k">Máximo 52</span>
+            <span class="v">${{ fmt2(vm.price.max52W) }}</span>
           </div>
-          <div *ngIf="summary.data.price?.volumeMoney" class="flex justify-content-between align-items-center py-2 border-bottom-1 surface-border">
-            <span class="text-600 font-medium">Volumen</span>
-            <span class="font-semibold text-700">{{ summary.data.price.volumeMoney | number:'1.0-0' }}</span>
+          
+          <div class="kv-row">
+            <span class="k">Mínimo 52 semanas</span>
+            <span class="v">${{ fmt2(vm.price.min52W) }}</span>
           </div>
-          <div *ngIf="summary.data.info?.hourOpen && summary.data.info?.hourClose" class="flex justify-content-between align-items-center py-2 border-bottom-1 surface-border">
-            <span class="text-600 font-medium">Horario</span>
-            <span class="font-semibold text-700">{{ summary.data.info.hourOpen }} - {{ summary.data.info.hourClose }}</span>
+          
+          <div class="kv-row">
+            <span class="k">Volumen</span>
+            <span class="v">{{ fmtInt(vm.price.volumeMoney) }}</span>
           </div>
-          <div class="flex justify-content-between align-items-center py-2 border-bottom-1 surface-border">
-            <span class="text-600 font-medium">Timestamp</span>
-            <span class="font-semibold text-700">{{ summary.data.price?.datetimeLastPrice || '—' }}</span>
+          
+          <div class="kv-row" *ngIf="vm.info.hourOpen && vm.info.hourClose">
+            <span class="k">Horario</span>
+            <span class="v">{{ vm.info.hourOpen }} - {{ vm.info.hourClose }}</span>
+          </div>
+
+          <!-- Separador Variación** % -->
+          <div class="sep">Variación %</div>
+          
+          <div class="kv-row">
+            <span class="k">1 MES</span>
+            <span class="v" [class]="pctClass(vm.perf.m1)">{{ fmtPct(vm.perf.m1) }}</span>
+          </div>
+          
+          <div class="kv-row">
+            <span class="k">1 AÑO</span>
+            <span class="v" [class]="pctClass(vm.perf.y1)">{{ fmtPct(vm.perf.y1) }}</span>
+          </div>
+          
+          <div class="kv-row">
+            <span class="k">AÑO A LA FECHA</span>
+            <span class="v" [class]="pctClass(vm.perf.ytd)">{{ fmtPct(vm.perf.ytd) }}</span>
           </div>
         </div>
       </div>
@@ -162,10 +161,10 @@
   </div>
   
   <ng-template #noSummary>
-    <div class="no-summary text-center py-6">
-      <i class="pi pi-info-circle text-6xl text-300 mb-3"></i>
-      <h3 class="text-xl text-500 m-0">No hay datos de resumen</h3>
-      <p class="text-sm text-400 mt-2 m-0">Selecciona un instrumento para ver su información detallada</p>
+    <div class="no-summary">
+      <div class="no-summary-icon">📊</div>
+      <h3 class="no-summary-title">No hay datos de resumen</h3>
+      <p class="no-summary-text">Selecciona un instrumento para ver su información detallada</p>
     </div>
   </ng-template>
 </div>

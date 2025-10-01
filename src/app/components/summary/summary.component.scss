@@ -1,0 +1,186 @@
+.summary-container {
+  background: #1a1a1a;
+  border-radius: 8px;
+  padding: 20px;
+  color: white;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  min-height: 400px;
+}
+
+.tabs {
+  display: flex;
+  border-bottom: 1px solid #333;
+  margin-bottom: 20px;
+  
+  button {
+    background: none;
+    border: none;
+    color: #888;
+    padding: 12px 20px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s ease;
+    
+    &.active {
+      color: white;
+      border-bottom-color: #0ea5e9;
+    }
+    
+    &:hover:not(.active) {
+      color: #ccc;
+    }
+  }
+}
+
+.tab-content {
+  .symbol {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 4px;
+  }
+  
+  .name {
+    color: #888;
+    font-size: 14px;
+    margin-bottom: 20px;
+  }
+  
+  .price-section {
+    margin-bottom: 20px;
+    
+    .price {
+      font-size: 32px;
+      font-weight: bold;
+      margin-bottom: 4px;
+    }
+    
+    .timestamp {
+      color: #888;
+      font-size: 12px;
+    }
+  }
+  
+  .variation-band {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 20px;
+    
+    .variation-item {
+      text-align: center;
+      
+      .label {
+        color: #888;
+        font-size: 12px;
+        margin-bottom: 4px;
+      }
+      
+      .value {
+        font-size: 14px;
+        font-weight: 500;
+      }
+    }
+  }
+  
+  .info-rows {
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px solid #333;
+      font-size: 14px;
+      
+      &:last-child {
+        border-bottom: none;
+      }
+      
+      .label {
+        color: #888;
+      }
+      
+      .value {
+        color: white;
+      }
+    }
+  }
+}
+
+.details-content {
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #333;
+    
+    .title {
+      font-size: 14px;
+      font-weight: 500;
+      color: white;
+    }
+    
+    .timestamp {
+      font-size: 12px;
+      color: #888;
+    }
+  }
+}
+
+.kv-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  font-size: 14px;
+  
+  .k {
+    color: #888;
+    text-transform: uppercase;
+    font-size: 12px;
+  }
+  
+  .v {
+    color: white;
+    font-weight: 500;
+  }
+}
+
+.sep {
+  margin: 20px 0 16px 0;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #333;
+  font-size: 14px;
+  font-weight: 500;
+  color: white;
+}
+
+// Color classes for variations
+.pos {
+  color: #16a34a !important;
+}
+
+.neg {
+  color: #dc2626 !important;
+}
+
+.neu {
+  color: #6b7280 !important;
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .variation-band {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+  
+  .summary-container {
+    padding: 16px;
+  }
+  
+  .tab-content .price-section .price {
+    font-size: 28px;
+  }
+}

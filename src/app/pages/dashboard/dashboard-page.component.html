@@ -52,7 +52,11 @@
       <!-- Right Column: Summary Details -->
       <div class="col-12 lg:col-4">
         <div class="p-3 surface-card border-round shadow-1">
-          <app-summary [summary]="marketStore.summary()"></app-summary>
+          <app-summary 
+            [instrument]="marketStore.selectedInstrument()" 
+            [history]="historyArray()"
+            [period]="marketStore.period()">
+          </app-summary>
         </div>
       </div>
     </div>
